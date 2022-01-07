@@ -328,7 +328,4 @@ class Ui_MainWindow(object):
             print("this set right")
 
 
-
-
-
 from PyQt5.QtMultimediaWidgets import QVideoWidget

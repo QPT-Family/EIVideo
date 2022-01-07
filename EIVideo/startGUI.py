@@ -1,3 +1,9 @@
+# Author: AP-Kai
+# Datetime: 2022/1/7
+# Copyright belongs to the author.
+# Please indicate the source for reprinting.
+
+
 import os
 import sys
 from Ui_MainWindow import Ui_MainWindow
