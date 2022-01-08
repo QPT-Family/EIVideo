@@ -17,7 +17,7 @@ class PaintBoard(QWidget):
 
     def __InitData(self):
 
-        self.__size = QSize(911, 481)
+        self.__size = QSize(910, 480)
 
         # 新建QPixmap作为画板，尺寸为__size
         self.__board = QPixmap(self.__size)
@@ -32,7 +32,7 @@ class PaintBoard(QWidget):
         self.__painter = QPainter()  # 新建绘图工具
 
 
-        self.__thickness = 10  # 默认画笔粗细为10px
+        self.__thickness = 1  # 默认画笔粗细为10px
         self.__penColor = QColor("black")  # 设置默认画笔颜色为黑色
         self.__colorList = QColor.colorNames()  # 获取颜色列表
 
@@ -48,7 +48,7 @@ class PaintBoard(QWidget):
 
     def ChangePenColor(self, color="black"):
         # 改变画笔颜色
-
+        # rgbaColor = QColor(255, 255, 0, 100)
         self.__penColor = QColor(color)
 
     def ChangePenThickness(self, thickness=10):
@@ -93,7 +93,7 @@ class PaintBoard(QWidget):
             self.__painter.setPen(QPen(Qt.transparent, 10))
 
         # 画线
-        print(self.__lastPos + self.__currentPos)
+        # print(self.__lastPos + self.__currentPos)
         self.__painter.drawLine(self.__lastPos, self.__currentPos)
         self.__painter.end()
         self.__lastPos = self.__currentPos
