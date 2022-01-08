@@ -5,6 +5,8 @@ import cv2
 import numpy as np
 from PIL import Image
 
+from resources.backend.paddlevideo.utils.manet_utils import overlay_davis
+
 
 def load_video(path, min_side=None):
     frame_list = []
@@ -44,3 +46,19 @@ def get_images(sequence='bike-packing'):
         img_file = np.array(Image.open(os.path.join(img_path, img)))
         files.append(img_file)
     return np.array(files)
+def submit_masks(masks, images, inter_file_path):
+    overlays = []
+    save_result_path = os.path.join(inter_file_path, 'result')
+    os.makedirs(save_result_path, exist_ok=True)
+    for imgname, (mask, image) in enumerate(zip(masks, images)):
+        overlay = overlay_davis(image, mask)
+        overlays.append(overlay.tolist())
+        overlay = Image.fromarray(overlay)
+        imgname = str(imgname)
+        while len(imgname) < 5:
+            imgname = '0' + imgname
+        overlay.save(os.path.join(save_result_path, imgname + '.png'))
+    result = {'overlays': overlays}
+    # result = {'masks': masks.tolist()}
+    with open(os.path.join(save_result_path, 'masks.json'), 'w') as f:
+        json.dump(result, f)
