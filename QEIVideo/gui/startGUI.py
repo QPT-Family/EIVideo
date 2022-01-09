@@ -6,7 +6,7 @@
 
 import os
 import sys
-from Ui_MainWindow import Ui_MainWindow
+from QEIVideo.gui.Ui_MainWindow import Ui_MainWindow
 from PyQt5.QtWidgets import *
 
 

@@ -16,6 +16,8 @@ import random
 
 import numpy as np
 import paddle
+import sys
+sys.path.append('E:/PaddlePaddle_Project/EIVideo')
 from resources.backend.paddlevideo.tasks import (test_model, train_dali, train_model,
                                train_model_multigrid)
 from resources.backend.paddlevideo.utils import get_config, get_dist_info
