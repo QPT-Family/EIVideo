@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="50c67b8b-5bf5-4954-8c75-c705b5a9d22d" name="sshConfig://lc@localhost:53392 password/home/lc/anaconda3/envs/pd/bin/python">
+        <fileTransfer accessType="SFTP" host="localhost" port="53392" sshConfigId="ca203719-aa09-4483-b141-ff4ff4043ca5" sshConfig="sshConfig://lc@localhost:53392 password/home/lc/anaconda3/envs/pt/bin/python" />
+      </webServer>
+    </option>
+  </component>
+</project>
