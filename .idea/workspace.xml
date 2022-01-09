@@ -1,64 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0b6319c4-d490-4b4c-b227-3eea1cbf4ad3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/.github/ISSUE_TEMPLATE/bug_report.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/.github/ISSUE_TEMPLATE/custom.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/.github/ISSUE_TEMPLATE/feature_request.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/loader/builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/loader/builder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/loader/dali_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/loader/dali_loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/loader/dataloader/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/loader/dataloader/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/loader/sampler/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/loader/sampler/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/loader/sampler/manet_sampler.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/loader/sampler/manet_sampler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/ActivityNet/anet_prop.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/ActivityNet/anet_prop.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/ava_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/ava_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/bmn_metric.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/bmn_metric.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/center_crop_metric.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/center_crop_metric.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/depth_metric.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/depth_metric.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/msrvtt_metric.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/msrvtt_metric.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/multi_crop_metric.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/multi_crop_metric.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/skeleton_metric.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/skeleton_metric.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/transnetv2_metric.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/transnetv2_metric.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/vos_metric.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/vos_metric.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/youtube8m/eval_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/metrics/youtube8m/eval_util.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/backbones/aspp_manet.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/backbones/aspp_manet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/backbones/decoder_manet.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/backbones/decoder_manet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/backbones/deeplab_manet.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/backbones/deeplab_manet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/backbones/resnet_manet.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/backbones/resnet_manet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/backbones/resnet_slowfast.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/backbones/resnet_slowfast.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/backbones/resnet_slowfast_MRI.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/backbones/resnet_slowfast_MRI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/estimators/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/estimators/base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/estimators/depth_estimator.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/estimators/depth_estimator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/multimodal/actbert.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/multimodal/actbert.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/recognizers/recognizer2d.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/recognizers/recognizer2d.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/recognizers/recognizer3d.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/recognizers/recognizer3d.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/recognizers/recognizer3dMRI.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/recognizers/recognizer3dMRI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/recognizers/recognizerMRI.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/recognizers/recognizerMRI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/recognizers/recognizer_gcn.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/recognizers/recognizer_gcn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/recognizers/recognizer_transformer.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/recognizers/recognizer_transformer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/recognizers/recognizer_transformer_MRI.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/recognizers/recognizer_transformer_MRI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/segment/cfbi.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/segment/cfbi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/segment/manet_stage1.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/segment/manet_stage1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/segment/manet_stage2.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/framework/segment/manet_stage2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/heads/IntVOS.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/heads/IntVOS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/heads/adds_head.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/heads/adds_head.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/heads/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/modeling/heads/base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/tasks/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/tasks/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/tasks/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/tasks/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/tasks/train_dali.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/tasks/train_dali.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/tasks/train_multigrid.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/tasks/train_multigrid.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/utils/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/utils/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/utils/precise_bn.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/utils/precise_bn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/paddlevideo/utils/save_load.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/paddlevideo/utils/save_load.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/backend/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/resources/backend/readme.md" afterDir="false" />
-    </list>
+    <list default="true" id="0b6319c4-d490-4b4c-b227-3eea1cbf4ad3" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -91,7 +34,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1641685952901</updated>
-      <workItem from="1641685955893" duration="625000" />
+      <workItem from="1641685955893" duration="881000" />
     </task>
     <servers />
   </component>
