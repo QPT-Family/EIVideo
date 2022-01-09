@@ -5,7 +5,7 @@ import json
 from collections import OrderedDict
 
 def png2json(image_path, sliderframenum, save_json_path):
-    image = Image.open(image_path) # 用PIL中的Image.open打开图像
+    image = Image.open(image_path)  # 用PIL中的Image.open打开图像
     image = image.convert('P')
     image_arr = np.array(image)  # 转化成numpy数组
     image_arr = image_arr.astype("float32")
@@ -47,3 +47,5 @@ def png2json(image_path, sliderframenum, save_json_path):
 
 if __name__ == '__main__':
     png2json("123.png", 10, 'test_data.json')
+
+

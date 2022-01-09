@@ -30,6 +30,8 @@ from ...builder import build_model
 from ...registry import SEGMENT
 from .base import BaseSegment
 
+from EIVideo.member import m
+
 # if cfg.MODEL.framework == "ManetSegment_Stage1":
 #     cfg_helper = {"knns": 1,
 #                   "is_save_image": True}
@@ -118,8 +120,8 @@ class ManetSegment_Stage1(BaseSegment):
         sequence = 'bike-packing'
         obj_nums = 1
         if sequence == 'drone':
-            video = 'data/1.mp4'
-            images = load_video(video, 480)
+
+            images, _ = load_video(480)
         elif sequence == 'bike-packing':
             images = get_images(sequence='bike-packing')
             obj_nums = 2
@@ -262,7 +264,8 @@ class ManetSegment_Stage1(BaseSegment):
                     )
                     print(paddle.unique(scribble_label))
                     final_masks = prev_label_storage
-                    submit_masks(final_masks.numpy(), images, inter_file_path)
+                    m.inter_file_path = inter_file_path
+                    submit_masks(final_masks.numpy(), images)
                     continue
 
                     ###inteaction segmentation head
@@ -461,7 +464,8 @@ class ManetSegment_Stage1(BaseSegment):
                 pred_masks_reverse.reverse()
                 pred_masks_reverse.extend(pred_masks)
                 final_masks = paddle.concat(pred_masks_reverse, 0)
-                submit_masks(final_masks.numpy(), images, inter_file_path)
+                m.inter_file_path = inter_file_path
+                submit_masks(final_masks.numpy(), images)
 
                 t_end = timeit.default_timer()
                 print('Total time for single interaction: ' +
