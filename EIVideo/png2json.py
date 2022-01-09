@@ -41,7 +41,7 @@ def png2json(image_path, sliderframenum, save_json_path):
             dic['scribbles'].append([])
 
     json_str = json.dumps(dic)
-    with open('save_json_path', 'w') as json_file:
+    with open(save_json_path, 'w') as json_file:
         json_file.write(json_str)
 
 

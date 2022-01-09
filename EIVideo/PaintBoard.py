@@ -32,7 +32,7 @@ class PaintBoard(QWidget):
         self.__painter = QPainter()  # 新建绘图工具
 
 
-        self.__thickness = 1  # 默认画笔粗细为10px
+        self.__thickness = 15  # 默认画笔粗细为10px
         self.__penColor = QColor("black")  # 设置默认画笔颜色为黑色
         self.__colorList = QColor.colorNames()  # 获取颜色列表
 
