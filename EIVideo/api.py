@@ -11,7 +11,7 @@ import cv2
 import numpy as np
 from PIL import Image
 
-from resources.backend.paddlevideo.utils.manet_utils import overlay_davis
+from EIVideo.paddlevideo.utils.manet_utils import overlay_davis
 
 from EIVideo.member import m
 

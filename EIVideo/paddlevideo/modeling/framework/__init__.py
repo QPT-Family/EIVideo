@@ -18,11 +18,11 @@ from .partitioners import BasePartitioner, TransNetV2Partitioner
 from .recognizers import BaseRecognizer, Recognizer2D
 from .multimodal import ActBert, BaseMultimodal
 from .segment import BaseSegment, CFBI
-from .segment import BaseSegment, ManetSegment_Stage1, ManetSegment_Stage2
+from .segment import BaseSegment, ManetSegment_Stage1
 
 __all__ = [
     'BaseRecognizer', 'Recognizer2D', 'BaseLocalizer', 'BMNLocalizer',
     'BasePartitioner', 'TransNetV2Partitioner', 'BaseEstimator',
     'DepthEstimator', 'BaseMultimodal', 'ActBert', 'BaseSegment', 'CFBI',
-    'ManetSegment_Stage1', 'ManetSegment_Stage2'
+    'ManetSegment_Stage1'
 ]

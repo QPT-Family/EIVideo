@@ -23,7 +23,6 @@ from EIVideo.paddlevideo.utils import (add_profiler_step)
 from ..loader.builder import build_dataloader, build_dataset
 from ..metrics.ava_utils import collect_results_cpu
 from ..modeling.builder import build_model
-from ..modeling.framework.segment import ManetSegment_Stage2
 from ..solver import build_lr, build_optimizer
 from ..utils import do_preciseBN
 from EIVideo.paddlevideo.utils import get_logger

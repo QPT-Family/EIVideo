@@ -27,7 +27,7 @@ def parse_args():
     parser.add_argument('-c',
                         '--config',
                         type=str,
-                        default='/home/lc/backend/resources/backend/configs/manet_stage1.yaml',
+                        default='/home/lc/backend/EIVideo/configs/manet_stage1.yaml',
                         help='config file path')
     parser.add_argument('-o',
                         '--override',
@@ -85,8 +85,8 @@ def parse_args():
 
 def main():
     args = parse_args()
-    cfg = get_config('/home/lc/manet/save_step_80000/save_step_80000.pdparams', overrides=args.override)
-    # cfg = get_config(args.config, overrides=args.override)
+    # cfg = get_config('/home/lc/manet/save_step_80000/save_step_80000.pdparams', overrides=args.override)
+    cfg = get_config(args.config, overrides=args.override)
 
     # set seed if specified
     seed = args.seed

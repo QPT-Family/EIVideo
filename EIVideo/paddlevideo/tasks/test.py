@@ -18,7 +18,6 @@ from ..loader.builder import build_dataloader, build_dataset
 from ..metrics import build_metric
 from ..modeling.builder import build_model
 from ..modeling.framework import ManetSegment_Stage1
-from ..modeling.framework.segment import ManetSegment_Stage2
 
 logger = get_logger("paddlevideo")
 
