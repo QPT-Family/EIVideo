@@ -20,14 +20,14 @@ import paddle
 from EIVideo.paddlevideo.tasks import (test_model, train_dali, train_model,
                                        train_model_multigrid)
 from EIVideo.paddlevideo.utils import get_config, get_dist_info
-
+from EIVideo.member import m
 
 def parse_args():
     parser = argparse.ArgumentParser("PaddleVideo train script")
     parser.add_argument('-c',
                         '--config',
                         type=str,
-                        default='/home/lc/backend/EIVideo/configs/manet_stage1.yaml',
+                        default='E:/PaddlePaddle_Project/EIVideo/EIVideo/configs/manet_stage1.yaml',
                         help='config file path')
     parser.add_argument('-o',
                         '--override',
@@ -102,7 +102,7 @@ def main():
     parallel = world_size != 1
     if parallel:
         paddle.distributed.init_parallel_env()
-    test_model(cfg, weights='/home/lc/manet/save_step_80000/save_step_80000.pdparams', parallel=parallel)
+    test_model(cfg, weights=m.weights_path, parallel=parallel)
 
 
 if __name__ == '__main__':

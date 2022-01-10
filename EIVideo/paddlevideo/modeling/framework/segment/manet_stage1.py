@@ -116,7 +116,8 @@ class ManetSegment_Stage1(BaseSegment):
         # 2. Construct data.
         sequence = 'demo'
         obj_nums = 1
-        images = load_video(480)
+        images, _ = load_video(480)
+        print("stage1 load_video success")
         # [195, 389, 238, 47, 244, 374, 175, 399]
         # .shape: (502, 480, 600, 3)
         report_save_dir = cfg.get("output_dir",
@@ -178,7 +179,7 @@ class ManetSegment_Stage1(BaseSegment):
                         seen_seq = True
                         inter_turn = 1
                         embedding_memory = []
-                        places = paddle.set_device('gpu')
+                        places = paddle.set_device('cpu')
 
                         for imgs in images:
                             if cfg['PIPELINE'].get('test'):
@@ -256,7 +257,7 @@ class ManetSegment_Stage1(BaseSegment):
                     )
                     print(paddle.unique(scribble_label))
                     final_masks = prev_label_storage
-                    submit_masks(final_masks.numpy(), images, inter_file_path)
+                    submit_masks(final_masks.numpy(), images)
                     continue
 
                     ###inteaction segmentation head
@@ -455,7 +456,7 @@ class ManetSegment_Stage1(BaseSegment):
                 pred_masks_reverse.reverse()
                 pred_masks_reverse.extend(pred_masks)
                 final_masks = paddle.concat(pred_masks_reverse, 0)
-                submit_masks(final_masks.numpy(), images, inter_file_path)
+                submit_masks(final_masks.numpy(), images)
 
                 t_end = timeit.default_timer()
                 print('Total time for single interaction: ' +

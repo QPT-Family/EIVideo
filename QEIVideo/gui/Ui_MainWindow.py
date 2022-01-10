@@ -15,6 +15,7 @@ import cv2
 from QEIVideo.widget.PaintBoard import PaintBoard
 from EIVideo.api import load_video, json2frame, png2json
 from EIVideo.member import m
+from EIVideo.main import main
 
 
 class Ui_MainWindow(object):
@@ -162,15 +163,14 @@ class Ui_MainWindow(object):
         image.save(m.image_path)
         print(self.sliderframenum)
         self.progressBar.setProperty("value", 25)
-        png2json(m.image_path, self.sliderframenum, 'E:/test_data.json')
-        m.json_path = "E:/test_data.json"
+        m.one_json_path = "E:/PaddlePaddle_Project/EIVideo/resources/test_data.json"
+        png2json(m.image_path, self.sliderframenum, m.one_json_path)
         self.progressBar.setProperty("value", 50)
         print('inferok1')
-        os.system("python E:/PaddlePaddle_Project/EIVideo/resources/backend/main.py --test "
-                  "-c E:/PaddlePaddle_Project/EIVideo/resources/backend/configs/manet_stage1.yaml "
-                  "-w E:/PaddlePaddle_Project/EIVideo/resources/backend/model/save_step_80000.pdparams")
+        main()
         self.progressBar.setProperty("value", 75)
-        self.all_frames = json2frame(m.submit_masks_json_path)
+        self.all_frames = json2frame(os.path.join(m.inter_file_path, "masks.json"))
+        print("success get submit_masks")
         self.openFrame()
         self.progressBar.setProperty("value", 100)
         self.label.setText("Infer succeed")

@@ -51,7 +51,8 @@ def get_images(sequence='bike-packing'):
 
 def get_scribbles():
     for i in range(8):
-        with open(m.json_path) as f:
+        with open(m.one_json_path) as f:
+            print("load one_json_path success")
             scribbles = json.load(f)
             first_scribble = not i
             yield scribbles, first_scribble
@@ -72,12 +73,13 @@ def submit_masks(masks, images):
     result = {'overlays': overlays}
     # result = {'masks': masks.tolist()}
     m.submit_masks_json_path = os.path.join(save_result_path, "masks.json")
+    print("saved masks.json, path: " + os.path.join(save_result_path, "masks.json"))
     with open(m.submit_masks_json_path, 'w') as f:
         json.dump(result, f)
 
 
 def json2frame(path):
-    print(path)
+    print("now turn masks.json to frames", path)
     with open(path, 'r', encoding='utf-8') as f:
         res = f.read()
         a = json.loads(res)
@@ -86,8 +88,12 @@ def json2frame(path):
         frame_list = []
 
         for i in range(0, len(b_array)):
-            im = Image.fromarray(np.uint8(b_array[i]))
-            im = cv2.cvtColor(np.asarray(im), cv2.COLOR_RGB2BGR)
+            # im = Image.fromarray(np.uint8(b_array[i]))
+            # im = cv2.cvtColor(np.asarray(im), cv2.COLOR_RGB2BGR)
+            # img = b_array[i].copy().astype("uint8")
+            im = np.array(b_array[i]).astype("uint8")
+            im = im.transpose((2, 0, 1))
+            im = cv2.merge(im)
             frame_list.append(im)
     return frame_list
 

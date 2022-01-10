@@ -8,7 +8,7 @@ MODEL: #MODEL field
     freeze_bn: False
   head:
     name: "IntVOS"
-    pretrained: "/home/lc/manet/init_for_align/init_for_align.pdparams"
+    # pretrained: "/home/lc/manet/init_for_align/init_for_align.pdparams"
 #    pretrained: "/root/codespace/manet_paddle/init_for_align.pdparams"
     loss_cfg:
       name: "Added_CrossEntropyLoss"
