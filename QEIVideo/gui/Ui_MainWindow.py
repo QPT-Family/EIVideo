@@ -56,21 +56,21 @@ class Ui_MainWindow(object):
         self.cbtn_Eraser = QCheckBox("橡皮擦")
         self.cbtn_Eraser.setParent(self.frame)
         self.cbtn_Eraser.move(950, 40)
-        self.cbtn_Eraser.clicked.connect(self.on_cbtn_Eraser_clicked)
+        self.cbtn_Eraser.clicked.connect(self.on_cbtn_eraser_clicked)
         self.btn_Clear = QPushButton("清空画板")
         self.btn_Clear.setParent(self.frame)  # 设置父对象为本界面
         self.btn_Clear.move(950, 60)
-        self.btn_Clear.clicked.connect(self.paintBoard.Clear)
+        self.btn_Clear.clicked.connect(self.paintBoard.clear)
         self.label_penColor = QLabel(self.frame)
         self.label_penColor.setText("画笔颜色")
         self.label_penColor.move(990, 100)
         # 获取颜色列表(字符串类型)
         self.colorList = QColor.colorNames()
         self.comboBox_penColor = QComboBox(self.frame)
-        self.fillColorList(self.comboBox_penColor)  # 用各种颜色填充下拉列表
+        self.fill_color_list(self.comboBox_penColor)  # 用各种颜色填充下拉列表
         self.comboBox_penColor.move(1080, 80)
         self.comboBox_penColor.currentIndexChanged.connect(
-            self.on_PenColorChange)  # 关联下拉列表的当前索引变更信号与函数on_PenColorChange
+            self.on_pen_color_change)  # 关联下拉列表的当前索引变更信号与函数on_PenColorChange
 
         self.widget2 = QtWidgets.QWidget(self.frame)
         self.widget2.move(1050, 100)
@@ -159,19 +159,19 @@ class Ui_MainWindow(object):
     def infer(self):
         self.label.setText("Start infer")
         self.progressBar.setProperty("value", 0)
-        image = self.paintBoard.GetContentAsQImage()
+        image = self.paintBoard.get_content_as_q_image()
         image.save(m.image_path)
-        print(self.sliderframenum)
+        print(self.slider_frame_num)
         self.progressBar.setProperty("value", 25)
         m.one_json_path = "E:/PaddlePaddle_Project/EIVideo/resources/test_data.json"
-        png2json(m.image_path, self.sliderframenum, m.one_json_path)
+        png2json(m.image_path, self.slider_frame_num, m.one_json_path)
         self.progressBar.setProperty("value", 50)
         print('inferok1')
         main()
         self.progressBar.setProperty("value", 75)
         self.all_frames = json2frame(os.path.join(m.inter_file_path, "masks.json"))
         print("success get submit_masks")
-        self.openFrame()
+        self.open_frame()
         self.progressBar.setProperty("value", 100)
         self.label.setText("Infer succeed")
 
@@ -179,17 +179,17 @@ class Ui_MainWindow(object):
         if btn == self.playbtn:
             self.label.setText("Play video")
             if self.progress_slider.value() == self.cap.get(7) - 1:
-                self.sliderframenum = 0
-                self.progress_slider.setValue(self.sliderframenum)
-                self.time_label.setText('{}/{}'.format(self.sliderframenum, self.cap.get(7)))
+                self.slider_frame_num = 0
+                self.progress_slider.setValue(self.slider_frame_num)
+                self.time_label.setText('{}/{}'.format(self.slider_frame_num, self.cap.get(7)))
             self.timer_camera = QTimer()  # 定义定时器
             self.timer_camera.start(1000 / self.cap.get(cv2.CAP_PROP_FPS))
-            self.sliderframenum = self.progress_slider.value()
-            self.timer_camera.timeout.connect(self.openFrame)
+            self.slider_frame_num = self.progress_slider.value()
+            self.timer_camera.timeout.connect(self.open_frame)
 
         elif btn == self.pushButton_2:
             self.label.setText("Stop video")
-            self.slotStop()
+            self.slot_stop()
 
         elif btn == self.pushButton_4:
             self.label.setText("Choose video")
@@ -201,18 +201,18 @@ class Ui_MainWindow(object):
             if self.videoName != "":
                 self.cap = cv2.VideoCapture(self.videoName)
                 # 存所有frame
-                self.saveTempFrame()
+                self.save_temp_frame()
                 print("save temp frame done")
                 self.progress_slider.setRange(0, self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
-    def on_cbtn_Eraser_clicked(self):
+    def on_cbtn_eraser_clicked(self):
         self.label.setText("Eraser On")
         if self.cbtn_Eraser.isChecked():
             self.paintBoard.EraserMode = True  # 进入橡皮擦模式
         else:
             self.paintBoard.EraserMode = False  # 退出橡皮擦模式
 
-    def fillColorList(self, comboBox):
+    def fill_color_list(self, combo_box):
         index_black = 0
         index = 0
         for color in self.colorList:
@@ -221,51 +221,49 @@ class Ui_MainWindow(object):
             index += 1
             pix = QPixmap(70, 20)
             pix.fill(QColor(color))
-            comboBox.addItem(QIcon(pix), None)
-            comboBox.setIconSize(QSize(70, 20))
-            comboBox.setSizeAdjustPolicy(QComboBox.AdjustToContents)
+            combo_box.addItem(QIcon(pix), None)
+            combo_box.setIconSize(QSize(70, 20))
+            combo_box.setSizeAdjustPolicy(QComboBox.AdjustToContents)
 
-        comboBox.setCurrentIndex(index_black)
+        combo_box.setCurrentIndex(index_black)
 
-    def on_PenColorChange(self):
+    def on_pen_color_change(self):
         self.label.setText("Change pen color")
         color_index = self.comboBox_penColor.currentIndex()
         color_str = self.colorList[color_index]
 
-        self.paintBoard.ChangePenColor(color_str)
+        self.paintBoard.change_pen_color(color_str)
 
     # 拖拽进度条
     def update_video_position_func(self):
         self.label.setText("Change slider position")
-        self.sliderframenum = self.progress_slider.value()
-        self.slotStop()
-        self.openFrame()
-        self.progress_slider.setValue(self.sliderframenum)
-        self.time_label.setText('{}/{}'.format(self.sliderframenum, self.cap.get(7)))
+        self.slider_frame_num = self.progress_slider.value()
+        self.slot_stop()
+        self.open_frame()
+        self.progress_slider.setValue(self.slider_frame_num)
+        self.time_label.setText('{}/{}'.format(self.slider_frame_num, self.cap.get(7)))
 
-    def saveTempFrame(self):
+    def save_temp_frame(self):
         _, self.all_frames = load_video(480)
 
-    def slotStop(self):
+    def slot_stop(self):
         if self.cap != []:
             self.timer_camera.stop()  # 停止计时器
         else:
             Warming = QMessageBox.warning(self, "Warming", "Push the left upper corner button to Quit.",
                                           QMessageBox.Yes)
 
-    def openFrame(self):
-        self.progress_slider.setValue(self.sliderframenum)
-        self.sliderframenum = self.progress_slider.value()
-        self.frame = self.all_frames[self.sliderframenum]
+    def open_frame(self):
+        self.progress_slider.setValue(self.slider_frame_num)
+        self.slider_frame_num = self.progress_slider.value()
+        self.frame = self.all_frames[self.slider_frame_num]
         frame = self.frame
-        height, width, bytesPerComponent = frame.shape
-        bytesPerLine = bytesPerComponent * width
-        q_image = QImage(frame.data, width, height, bytesPerLine,
+        height, width, bytes_per_component = frame.shape
+        bytes_per_line = bytes_per_component * width
+        q_image = QImage(frame.data, width, height, bytes_per_line,
                          QImage.Format_RGB888).scaled(self.picturelabel.width(), self.picturelabel.height())
         self.picturelabel.setPixmap(QPixmap.fromImage(q_image))
-        self.sliderframenum = self.sliderframenum + 1
-        self.time_label.setText('{}/{}'.format(self.sliderframenum, self.cap.get(7)))
+        self.slider_frame_num = self.slider_frame_num + 1
+        self.time_label.setText('{}/{}'.format(self.slider_frame_num, self.cap.get(7)))
         if self.progress_slider.value() == self.cap.get(7) - 1:
-            self.slotStop()
-
-
+            self.slot_stop()
