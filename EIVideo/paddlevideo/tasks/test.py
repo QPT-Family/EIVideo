@@ -35,8 +35,8 @@ def test_model(cfg, weights, parallel=True):
     if cfg.MODEL.framework == "ManetSegment_Stage1":
         cfg_helper = {"knns": 1, "is_save_image": True}
         cfg.update(cfg_helper)
-        ManetSegment_Stage1().test_step(**cfg, weights=weights, parallel=False)
-        return
+        final = ManetSegment_Stage1().test_step(**cfg, weights=weights, parallel=False)
+        return final
     if cfg.MODEL.framework == "ManetSegment_Stage2":
         cfg_helper = {"knns": 1, "is_save_image": True}
         cfg.update(cfg_helper)

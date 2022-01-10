@@ -12,30 +12,10 @@ import numpy as np
 from PIL import Image
 
 from EIVideo.paddlevideo.utils.manet_utils import overlay_davis
+from EIVideo import TEMP_JSON_SAVE_PATH, TEMP_JSON_FINAL_PATH
 
-from EIVideo.member import m
 
 # use this
-def load_video(min_side=None):
-    print("now loading video")
-    print('this is video_path  ' + m.video_path)
-    frame_list = []
-    cap = cv2.VideoCapture(m.video_path)
-    while (cap.isOpened()):
-        _, frame = cap.read()
-        if frame is None:
-            break
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        if min_side:
-            h, w = frame.shape[:2]
-            new_w = (w * min_side // min(w, h))
-            new_h = (h * min_side // min(w, h))
-            frame = cv2.resize(frame, (new_w, new_h),
-                               interpolation=cv2.INTER_CUBIC)
-            # .transpose([2, 0, 1])
-        frame_list.append(frame)
-    frames = np.stack(frame_list, axis=0)
-    return frames, frame_list
 
 
 def get_images(sequence='bike-packing'):
@@ -47,35 +27,6 @@ def get_images(sequence='bike-packing'):
         img_file = np.array(Image.open(os.path.join(img_path, img)))
         files.append(img_file)
     return np.array(files)
-
-
-def get_scribbles():
-    for i in range(8):
-        with open(m.one_json_path) as f:
-            print("load one_json_path success")
-            scribbles = json.load(f)
-            first_scribble = not i
-            yield scribbles, first_scribble
-
-
-def submit_masks(masks, images):
-    overlays = []
-    save_result_path = os.path.join(m.inter_file_path, 'result')
-    os.makedirs(save_result_path, exist_ok=True)
-    for imgname, (mask, image) in enumerate(zip(masks, images)):
-        overlay = overlay_davis(image, mask)
-        overlays.append(overlay.tolist())
-        overlay = Image.fromarray(overlay)
-        imgname = str(imgname)
-        while len(imgname) < 5:
-            imgname = '0' + imgname
-        overlay.save(os.path.join(save_result_path, imgname + '.png'))
-    result = {'overlays': overlays}
-    # result = {'masks': masks.tolist()}
-    m.submit_masks_json_path = os.path.join(save_result_path, "masks.json")
-    print("saved masks.json, path: " + os.path.join(save_result_path, "masks.json"))
-    with open(m.submit_masks_json_path, 'w') as f:
-        json.dump(result, f)
 
 
 def json2frame(path):
@@ -137,3 +88,51 @@ def png2json(image_path, sliderframenum, save_json_path):
     json_str = json.dumps(dic)
     with open(save_json_path, 'w') as json_file:
         json_file.write(json_str)
+
+
+def load_video(video_path, min_side=None):
+    frame_list = []
+    # ToDo To AP-kai: 是不是轻松干掉了m.video_path？
+    cap = cv2.VideoCapture(video_path)
+    # ToDo To AP-kai: while (cap.isOpened()): -> 不必多写个括号哈
+    while cap.isOpened():
+        _, frame = cap.read()
+        if frame is None:
+            break
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        if min_side:
+            h, w = frame.shape[:2]
+            new_w = (w * min_side // min(w, h))
+            new_h = (h * min_side // min(w, h))
+            frame = cv2.resize(frame, (new_w, new_h),
+                               interpolation=cv2.INTER_CUBIC)
+            # .transpose([2, 0, 1])
+        frame_list.append(frame)
+    frames = np.stack(frame_list, axis=0)
+    return frames, frame_list
+
+
+def get_scribbles():
+    for i in range(8):
+        # ToDo To AP-kai: 常量就把它这样全局化
+        with open(TEMP_JSON_SAVE_PATH) as f:
+            print("load one_json_path success")
+            scribbles = json.load(f)
+            first_scribble = not i
+            yield scribbles, first_scribble
+
+
+def submit_masks(save_path, masks, images):
+    overlays = []
+    for img_name, (mask, image) in enumerate(zip(masks, images)):
+        overlay = overlay_davis(image, mask)
+        overlays.append(overlay.tolist())
+        overlay = Image.fromarray(overlay)
+        img_name = str(img_name)
+        while len(img_name) < 5:
+            img_name = '0' + img_name
+        overlay.save(os.path.join(save_path, img_name + '.png'))
+    result = {'overlays': overlays}
+    # result = {'masks': masks.tolist()}
+    with open(TEMP_JSON_FINAL_PATH, 'w') as f:
+        json.dump(result, f)

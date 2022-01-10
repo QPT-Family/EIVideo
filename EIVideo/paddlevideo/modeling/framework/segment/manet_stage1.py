@@ -22,13 +22,14 @@ from PIL import Image
 from davisinteractive.utils.scribbles import scribbles2mask, annotated_frames
 from paddle import nn
 
-
 from EIVideo.paddlevideo.utils import load
 from EIVideo.paddlevideo.utils.manet_utils import float_, _palette, damage_masks, long_, write_dict, rough_ROI
-from EIVideo.api import load_video, get_images, submit_masks, get_scribbles
+from EIVideo.api import load_video, get_scribbles, submit_masks
+
 from ...builder import build_model
 from ...registry import SEGMENT
 from .base import BaseSegment
+
 
 # if cfg.MODEL.framework == "ManetSegment_Stage1":
 #     cfg_helper = {"knns": 1,
@@ -91,10 +92,10 @@ class ManetSegment_Stage1(BaseSegment):
             label_dic[seq_] = long_(label_tmp)
         loss_metrics = {
             'loss':
-            self.head.loss(dic_tmp=tmp_dic,
-                           label_dic=label_dic,
-                           step=step,
-                           obj_dict=obj_dict) / bs
+                self.head.loss(dic_tmp=tmp_dic,
+                               label_dic=label_dic,
+                               step=step,
+                               obj_dict=obj_dict) / bs
         }
         return loss_metrics
 
@@ -116,7 +117,7 @@ class ManetSegment_Stage1(BaseSegment):
         # 2. Construct data.
         sequence = 'demo'
         obj_nums = 1
-        images, _ = load_video(480)
+        images, _ = load_video(cfg["video_path"], 480)
         print("stage1 load_video success")
         # [195, 389, 238, 47, 244, 374, 175, 399]
         # .shape: (502, 480, 600, 3)
@@ -154,7 +155,8 @@ class ManetSegment_Stage1(BaseSegment):
                     prev_label_storage = paddle.zeros([f, h, w])
                 if len(annotated_frames(scribbles)) == 0:
                     final_masks = prev_label_storage
-                    submit_masks(final_masks.numpy(), images)
+                    # ToDo To AP-kai: save_path传过来了
+                    submit_masks(cfg["save_path"], final_masks.numpy(), images)
                     continue
 
                 # if no scribbles return, keep masks in previous round
@@ -186,7 +188,7 @@ class ManetSegment_Stage1(BaseSegment):
                                 imgs = paddle.to_tensor([
                                     build_pipeline(cfg['PIPELINE'].test)({
                                         'img1':
-                                        imgs
+                                            imgs
                                     })['img1']
                                 ])
                             else:
@@ -230,7 +232,7 @@ class ManetSegment_Stage1(BaseSegment):
                 output_dir = cfg.get("output_dir", f"./output/{model_name}")
                 inter_file_path = os.path.join(
                     output_dir, sequence, 'interactive' + str(n_interaction),
-                    'turn' + str(inter_turn))
+                                          'turn' + str(inter_turn))
                 if is_save_image:
                     ref_scribble_to_show = scribble_label.squeeze().numpy()
                     im_ = Image.fromarray(
@@ -257,10 +259,10 @@ class ManetSegment_Stage1(BaseSegment):
                     )
                     print(paddle.unique(scribble_label))
                     final_masks = prev_label_storage
-                    submit_masks(final_masks.numpy(), images)
+                    submit_masks(cfg["save_path"], final_masks.numpy(), images)
                     continue
 
-                    ###inteaction segmentation head
+                ###inteaction segmentation head
                 if parallel:
                     for c in model.children():
                         tmp_dic, local_map_dics = c.head.int_seghead(
@@ -456,9 +458,10 @@ class ManetSegment_Stage1(BaseSegment):
                 pred_masks_reverse.reverse()
                 pred_masks_reverse.extend(pred_masks)
                 final_masks = paddle.concat(pred_masks_reverse, 0)
-                submit_masks(final_masks.numpy(), images)
+                submit_masks(cfg["save_path"], final_masks.numpy(), images)
 
                 t_end = timeit.default_timer()
                 print('Total time for single interaction: ' +
                       str(t_end - t_total))
         inter_file.close()
+        return None
