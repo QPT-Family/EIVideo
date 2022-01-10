@@ -42,7 +42,10 @@ class PaintBoard(QWidget):
 
     def Clear(self):
         # 清空画板
-        self.__board.fill(Qt.white)
+        # self.__board.fill(Qt.white)
+        self.__board = QPixmap(self.__size)
+        self.__board.fill(Qt.transparent)  # 用透明填充画板
+
         self.update()
         self.__IsEmpty = True
 
