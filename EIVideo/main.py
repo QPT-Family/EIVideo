@@ -102,24 +102,7 @@ def main():
     parallel = world_size != 1
     if parallel:
         paddle.distributed.init_parallel_env()
-
-    if args.test:
-        test_model(cfg, weights=args.weights, parallel=parallel)
-    elif args.train_dali:
-        train_dali(cfg, weights=args.weights, parallel=parallel)
-    elif args.multigrid:
-        train_model_multigrid(cfg,
-                              world_size=world_size,
-                              validate=args.validate)
-    else:
-        train_model(cfg,
-                    weights='/home/lc/manet/save_step_80000/save_step_80000.pdparams',
-                    # weights=args.weights,
-                    parallel=parallel,
-                    validate=args.validate,
-                    use_fleet=args.fleet,
-                    amp=args.amp,
-                    profiler_options=args.profiler_options)
+    test_model(cfg, weights='/home/lc/manet/save_step_80000/save_step_80000.pdparams', parallel=parallel)
 
 
 if __name__ == '__main__':
