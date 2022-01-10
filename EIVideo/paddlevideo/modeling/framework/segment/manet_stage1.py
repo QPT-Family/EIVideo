@@ -114,15 +114,9 @@ class ManetSegment_Stage1(BaseSegment):
             model = paddle.DataParallel(model)
 
         # 2. Construct data.
-        # sequence = 'drone'
-        sequence = 'bike-packing'
+        sequence = 'demo'
         obj_nums = 1
-        if sequence == 'drone':
-            video = 'data/1.mp4'
-            images = load_video(video, 480)
-        elif sequence == 'bike-packing':
-            images = get_images(sequence='bike-packing')
-            obj_nums = 2
+        images = load_video(480)
         # [195, 389, 238, 47, 244, 374, 175, 399]
         # .shape: (502, 480, 600, 3)
         report_save_dir = cfg.get("output_dir",
