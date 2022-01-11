@@ -13,7 +13,9 @@
 # limitations under the License.
 
 from .builder import build_batch_pipeline
+from .pipelines.compose import Compose
 
 __all__ = [
-    'build_batch_pipeline',
+    'build_batch_pipeline','Compose'
 ]
+

@@ -16,8 +16,8 @@ import os
 import paddle
 from paddle.fluid.dataloader import BatchSampler
 from paddle.io import DataLoader, DistributedBatchSampler
-from paddle.vision import Compose
 
+from .pipelines.compose import Compose
 from .registry import DATASETS, PIPELINES, DATALOADERS, BATCH_SAMPLERS, SAMPLERS
 from ..utils import get_logger
 from ..utils.build_utils import build
