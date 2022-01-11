@@ -42,10 +42,10 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         # ToDo To AP-kai:相同的文件路径，直接定义一个常量就好
         png2json(TEMP_IMG_SAVE_PATH, self.slider_frame_num, TEMP_JSON_SAVE_PATH)
         self.progressBar.setProperty("value", 50)
-        # ToDo To AP-kai:打印的信息，需要注意首字母大些
-        print('Infer ok')
+        # ToDo To AP-kai:打印的信息，需要注意首字母大写
         # ToDo To AP-kai: 此处传入保存路径以及当前选择的视频路径，最后会在manet_stage1.py里通过cfg来传入
         main(video_path=self.select_video_path, save_path=self.save_path)
+        print('Infer ok')
         self.progressBar.setProperty("value", 75)
         self.all_frames = json2frame(TEMP_JSON_FINAL_PATH)
         print("Success get submit_masks")

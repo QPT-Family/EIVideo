@@ -11,6 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import os
+print(os.getcwd())
+import sys
+print(sys.path)
 import argparse
 import random
 
@@ -21,8 +25,10 @@ from EIVideo.paddlevideo.tasks import (test_model)
 from EIVideo.paddlevideo.utils import get_config, get_dist_info
 from EIVideo import EI_VIDEO_ROOT, join_root_path
 
+sys.path.append('/E:\PaddlePaddle_Project\EIVideo')
+
 DEF_CONFIG_FILE_PATH = join_root_path("configs/manet.yaml")
-DEF_PARAMS_FILE_PATH = join_root_path("/Users/liuchen21/Library/Mobile Documents/com~apple~CloudDocs/Documents/PycharmProjects/save_step_80000.pdparams")
+DEF_PARAMS_FILE_PATH = join_root_path("model/save_step_80000.pdparams")
 
 
 def parse_args():
@@ -113,4 +119,4 @@ def main(**kwargs):
 
 
 if __name__ == '__main__':
-    main(video_path='/Users/liuchen21/Library/Mobile Documents/com~apple~CloudDocs/Documents/1.mp4', save_path='./output')
+    main(video_path='example/example.mp4', save_path='./output')
