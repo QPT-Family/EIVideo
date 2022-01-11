@@ -11,11 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 from .base import BaseSegment
-from .cfbi import CFBI
 from .manet_stage1 import ManetSegment_Stage1
 
 __all__ = [
     'BaseSegment',
-    'CFBI',
     'ManetSegment_Stage1',
 ]

@@ -17,17 +17,20 @@ import random
 import numpy as np
 import paddle
 
-from EIVideo.paddlevideo.tasks import (test_model, train_dali, train_model,
-                                       train_model_multigrid)
+from EIVideo.paddlevideo.tasks import (test_model)
 from EIVideo.paddlevideo.utils import get_config, get_dist_info
-from EIVideo.member import m
+from EIVideo import EI_VIDEO_ROOT, join_root_path
+
+DEF_CONFIG_FILE_PATH = join_root_path("configs/manet_stage1.yaml")
+DEF_PARAMS_FILE_PATH = join_root_path("default.pdparams")
+
 
 def parse_args():
     parser = argparse.ArgumentParser("PaddleVideo train script")
     parser.add_argument('-c',
                         '--config',
                         type=str,
-                        default='E:/PaddlePaddle_Project/EIVideo/EIVideo/configs/manet_stage1.yaml',
+                        default=DEF_CONFIG_FILE_PATH,
                         help='config file path')
     parser.add_argument('-o',
                         '--override',
@@ -46,6 +49,7 @@ def parse_args():
     parser.add_argument('-w',
                         '--weights',
                         type=str,
+                        default=DEF_PARAMS_FILE_PATH,
                         help='weights for finetuning or testing')
     parser.add_argument('--fleet',
                         action='store_true',
@@ -73,7 +77,7 @@ def parse_args():
         type=str,
         default=None,
         help='The option of profiler, which should be in format '
-        '\"key1=value1;key2=value2;key3=value3\".')
+             '\"key1=value1;key2=value2;key3=value3\".')
     parser.add_argument('--use_npu',
                         type=bool,
                         default=False,
@@ -83,10 +87,12 @@ def parse_args():
     return args
 
 
-def main():
+def main(**kwargs):
     args = parse_args()
-    # cfg = get_config('/home/lc/manet/save_step_80000/save_step_80000.pdparams', overrides=args.override)
     cfg = get_config(args.config, overrides=args.override)
+    # ToDo To AP-kai: 下面这行代码目的是更新配置，这样的话我们调用main(use_npu = Ture)，这时cfg.use_npu就是Ture了
+    for key, value in kwargs.items():
+        cfg.__setattr__(key, value)
 
     # set seed if specified
     seed = args.seed
@@ -102,7 +108,8 @@ def main():
     parallel = world_size != 1
     if parallel:
         paddle.distributed.init_parallel_env()
-    test_model(cfg, weights=m.weights_path, parallel=parallel)
+    final = test_model(cfg, weights=args.weights, parallel=parallel)
+    return final
 
 
 if __name__ == '__main__':

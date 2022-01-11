@@ -60,7 +60,7 @@ class MeanAveragePrecisionCalculator(object):
         if not isinstance(num_class, int) or num_class <= 1:
             raise ValueError("num_class must be a positive integer.")
 
-        self._ap_calculators = []  # member of AveragePrecisionCalculator
+        self._ap_calculators = []  # Member of AveragePrecisionCalculator
         self._num_class = num_class  # total number of classes
         for i in range(num_class):
             self._ap_calculators.append(
