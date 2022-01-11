@@ -17,12 +17,13 @@ import random
 import numpy as np
 import paddle
 
-from EIVideo.paddlevideo.tasks import (test_model)
+from EIVideo.paddlevideo.tasks import (test_model, train_dali, train_model,
+                                       train_model_multigrid)
 from EIVideo.paddlevideo.utils import get_config, get_dist_info
 from EIVideo import EI_VIDEO_ROOT, join_root_path
 
 DEF_CONFIG_FILE_PATH = join_root_path("configs/manet_stage1.yaml")
-DEF_PARAMS_FILE_PATH = join_root_path("default.pdparams")
+DEF_PARAMS_FILE_PATH = join_root_path("model/save_step_80000.pdparams")
 
 
 def parse_args():
@@ -113,4 +114,4 @@ def main(**kwargs):
 
 
 if __name__ == '__main__':
-    main()
+    main(video_path='./example/example1.mp4', save_path='./output')
