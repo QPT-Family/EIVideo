@@ -17,8 +17,7 @@ import random
 import numpy as np
 import paddle
 
-from EIVideo.paddlevideo.tasks import (test_model, train_dali, train_model,
-                                       train_model_multigrid)
+from EIVideo.paddlevideo.tasks import (test_model)
 from EIVideo.paddlevideo.utils import get_config, get_dist_info
 from EIVideo import EI_VIDEO_ROOT, join_root_path
 
