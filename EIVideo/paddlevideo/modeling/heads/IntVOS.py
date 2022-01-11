@@ -670,7 +670,7 @@ class IntVOS(nn.Layer):
             if global_map_tmp_dic is not None:  ###when testing, use global map memory
                 if seq_names[n] not in global_map_tmp_dic:
                     global_map_tmp_dic[seq_names[n]] = paddle.ones_like(
-                        nn_features_n).tile([104, 1, 1, 1, 1])
+                        nn_features_n).tile([1000, 1, 1, 1, 1])
                 nn_features_n = paddle.where(
                     nn_features_n <= global_map_tmp_dic[seq_names[n]][
                         frame_num[n]].unsqueeze(0), nn_features_n,
@@ -714,12 +714,12 @@ class IntVOS(nn.Layer):
                 local_map_tmp_dic, local_map_dist_dic = local_map_dics
                 if seq_names[n] not in local_map_dist_dic:
                     print(seq_names[n], 'not in local_map_dist_dic')
-                    local_map_dist_dic[seq_names[n]] = paddle.zeros(104, 9)
+                    local_map_dist_dic[seq_names[n]] = paddle.zeros(1000, 9)
                 if seq_names[n] not in local_map_tmp_dic:
                     print(seq_names[n], 'not in local_map_tmp_dic')
                     local_map_tmp_dic[seq_names[n]] = paddle.zeros_like(
                         prev_frame_nn_features_n).unsqueeze(0).tile(
-                            [104, 9, 1, 1, 1, 1])
+                            [1000, 9, 1, 1, 1, 1])
                 #                 print(local_map_dist_dic[seq_names[n]].shape)
                 #                 print('detach 2')
                 # prev_frame_nn_features_n = prev_frame_nn_features_n.detach()
@@ -826,7 +826,7 @@ class IntVOS(nn.Layer):
             ######################Global map update
             if seq_names[n] not in global_map_tmp_dic:
                 global_map_tmp_dic[seq_names[n]] = paddle.ones_like(
-                    nn_features_n).tile([104, 1, 1, 1, 1])
+                    nn_features_n).tile([1000, 1, 1, 1, 1])
             nn_features_n_ = paddle.where(
                 nn_features_n <=
                 global_map_tmp_dic[seq_names[n]][frame_num[n]].unsqueeze(0),
@@ -844,10 +844,10 @@ class IntVOS(nn.Layer):
             if local_map_dics is not None:
                 local_map_tmp_dic, local_map_dist_dic = local_map_dics
                 if seq_names[n] not in local_map_dist_dic:
-                    local_map_dist_dic[seq_names[n]] = paddle.zeros([104, 9])
+                    local_map_dist_dic[seq_names[n]] = paddle.zeros([1000, 9])
                 if seq_names[n] not in local_map_tmp_dic:
                     local_map_tmp_dic[seq_names[n]] = paddle.ones_like(
-                        nn_features_n).unsqueeze(0).tile([104, 9, 1, 1, 1, 1])
+                        nn_features_n).unsqueeze(0).tile([1000, 9, 1, 1, 1, 1])
                 local_map_dist_dic[seq_names[n]][frame_num[n]][interaction_num
                                                                - 1] = 0
 
