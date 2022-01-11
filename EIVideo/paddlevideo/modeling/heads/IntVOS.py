@@ -485,7 +485,7 @@ print(c.a)
 
 
 @HEADS.register()
-class IntVOS(nn.layer):
+class IntVOS(nn.Layer):
     def __init__(self, feature_extracter, **cfg):
         super(IntVOS, self).__init__()
         self.feature_extracter = feature_extracter  ##embedding extractor
