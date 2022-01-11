@@ -7,7 +7,6 @@ from EIVideo.paddlevideo.utils.manet_utils import int_, float_, long_, load
 from EIVideo.paddlevideo.utils.manet_utils import kaiming_normal_
 
 #############################################################GLOBAL_DIST_MAP
-from .base import BaseHead
 
 MODEL_UNFOLD = True
 WRONG_LABEL_PADDING_DISTANCE = 1e20
@@ -486,9 +485,9 @@ print(c.a)
 
 
 @HEADS.register()
-class IntVOS(BaseHead):
+class IntVOS(nn.layer):
     def __init__(self, feature_extracter, **cfg):
-        super(IntVOS, self).__init__(0, 0, cfg['loss_cfg'])
+        super(IntVOS, self).__init__()
         self.feature_extracter = feature_extracter  ##embedding extractor
         self.feature_extracter.cls_conv = nn.Sequential()
         self.feature_extracter.upsample4 = nn.Sequential()
