@@ -11,9 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+from .backbones import DeepLab
 from .builder import (build_backbone, build_head, build_localizer, build_loss,
                       build_recognizer)
+from .heads import IntVOS
 from .registry import (BACKBONES, DETECTORS, HEADS, LOCALIZERS, LOSSES,
                        PARTITIONERS, RECOGNIZERS, ROI_EXTRACTORS)
 from .weight_init import kaiming_normal_, trunc_normal_, weight_init_
@@ -22,5 +23,5 @@ __all__ = [
     'BACKBONES', 'HEADS', 'RECOGNIZERS', 'LOCALIZERS', 'PARTITIONERS',
     'LOSSES', 'build_recognizer', 'build_localizer', 'build_head',
     'build_backbone', 'build_loss', 'DETECTORS', 'kaiming_normal_', 'trunc_normal_',
-    'weight_init_'
+    'weight_init_', 'DeepLab', 'IntVOS'
 ]
