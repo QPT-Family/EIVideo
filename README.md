@@ -18,7 +18,7 @@ EIVideo，基于百度飞桨MA-Net交互式视频分割模型打造的交互式*
 戳 -> 了解相关[技术文章&模型原理](等待微信公众号)
 
 <div align="center">
-<img width="600" alt="图片" src="https://ai-studio-static-online.cdn.bcebos.com/f792bac0dd3b4f44ade7d744b58e908e2a85ed8718b541cfb6b2ce9fc8ad4374">
+<img width="300" alt="图片" src="https://ai-studio-static-online.cdn.bcebos.com/f792bac0dd3b4f44ade7d744b58e908e2a85ed8718b541cfb6b2ce9fc8ad4374">
 </div>
 
 > 为了更好的解放双手，我们还提供了图形化界面工具QEIVideo，通过它我们可以不使用繁杂的命令方式来完成视频的智能标注工作。
