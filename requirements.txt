@@ -15,4 +15,3 @@ SimpleITK
 pyqt5
 paddlevideo
 davisinteractive
-cython

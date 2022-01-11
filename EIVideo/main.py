@@ -22,7 +22,7 @@ from EIVideo.paddlevideo.utils import get_config, get_dist_info
 from EIVideo import EI_VIDEO_ROOT, join_root_path
 
 DEF_CONFIG_FILE_PATH = join_root_path("configs/manet.yaml")
-DEF_PARAMS_FILE_PATH = join_root_path("model/save_step_80000.pdparams")
+DEF_PARAMS_FILE_PATH = join_root_path("model/default_manet.pdparams")
 
 
 def parse_args():
