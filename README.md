@@ -92,9 +92,9 @@ EIVideo，基于百度飞桨MA-Net交互式视频分割模型打造的交互式*
   
   # 如运行时无法找到对应包，可选择下述方式添加环境变量来调整索引次序后执行python
   # Windows
-  set PYTHONPATH=$pwd:$PYTHONPAT
+  set PYTHONPATH=$pwd:$PYTHONPATH
   # Linux
-  export PYTHONPATH=$pwd:$PYTHONPAT
+  export PYTHONPATH=$pwd:$PYTHONPATH
   ```
 
 > 上述命令仅适用于常规情况，若您安装了多个Python或修改了相关开发工具与配置，请自行修改相关命令使其符合您的开发环境。

@@ -65,7 +65,7 @@ class Manet(BaseSegment):
             model = paddle.DataParallel(model)
 
         # 2. Construct data.
-        sequence = 'demo'
+        sequence = cfg["video_path"].split('/')[-1].split('.')[0]
         obj_nums = 1
         images, _ = load_video(cfg["video_path"], 480)
         print("stage1 load_video success")
