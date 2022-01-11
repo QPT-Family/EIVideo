@@ -81,6 +81,8 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
                 self.save_temp_frame()
                 print("save temp frame done")
                 self.progress_slider.setRange(0, self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
+                self.slider_frame_num = 0
+                self.open_frame()
 
             # ToDo To AP-kai: 未来这个地方增加提示框，告诉他没有选择文件
 

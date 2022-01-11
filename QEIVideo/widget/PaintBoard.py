@@ -17,7 +17,7 @@ class PaintBoard(QWidget):
 
     def __init_data(self):
 
-        self.__size = QSize(910, 480)
+        self.__size = QSize(810, 458)
 
         # 新建QPixmap作为画板，尺寸为__size
         self.__board = QPixmap(self.__size)

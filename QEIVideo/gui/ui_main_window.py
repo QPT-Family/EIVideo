@@ -17,7 +17,7 @@ from QEIVideo.widget.PaintBoard import PaintBoard
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("EIVideo")
-        MainWindow.resize(1327, 871)
+        MainWindow.resize(1101, 751)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.frame = QtWidgets.QFrame(self.centralwidget)
@@ -35,19 +35,19 @@ class Ui_MainWindow(object):
         self.progress_slider = QSlider(self.frame)
         self.progress_slider.setEnabled(True)
         self.progress_slider.setOrientation(Qt.Horizontal)
-        self.progress_slider.setFixedWidth(800)
+        self.progress_slider.setFixedWidth(710)
         self.progress_slider.setFixedHeight(20)
         self.progress_slider.setSingleStep(1)  # 设置变化步长
         self.progress_slider.setValue(0)
         self.progress_slider.sliderReleased.connect(self.update_video_position_func)  # 拖拽进度条
 
         self.picturelabel = QtWidgets.QLabel(self.frame)
-        self.picturelabel.setGeometry(50, 40, 910, 480)
+        self.picturelabel.setGeometry(30, 30, 810, 458)
         self.picturelabel.setText("")
         self.picturelabel.setObjectName("picturelabel")
 
         self.paintBoard = PaintBoard(self.frame)
-        self.paintBoard.setGeometry(50, 40, 910, 480)
+        self.paintBoard.setGeometry(30, 30, 810, 458)
 
         self.cbtn_Eraser = QCheckBox("橡皮擦")
         self.cbtn_Eraser.setParent(self.frame)
@@ -68,12 +68,24 @@ class Ui_MainWindow(object):
         self.comboBox_penColor.currentIndexChanged.connect(
             self.on_pen_color_change)  # 关联下拉列表的当前索引变更信号与函数on_PenColorChange
 
+        self.helplabel = QLabel()
+        self.helplabel.setText("Hi,Welcome to use EIVideo\n"
+                               "This is a guide for EIVideo,\n"
+                               "please check\n"
+                               "1. Choose 'Add' for a video\n"
+                               "2. Click 'Play' to start playing\n"
+                               "3. At this point, all functions \n"
+                               "are unlocked\n"
+                               "4. Paint and enjoy it!\n")
+
         self.widget2 = QtWidgets.QWidget(self.frame)
-        self.widget2.move(1050, 100)
+        self.widget2.setGeometry(860, 60, 200, 300)
         self.widget2.setObjectName("widget2")
         self.rightLayout = QtWidgets.QVBoxLayout(self.widget2)
         self.rightLayout.setContentsMargins(0, 0, 0, 0)
         self.rightLayout.setObjectName("rightLayout")
+        self.rightLayout.addWidget(self.helplabel)
+        self.rightLayout.addSpacing(50)
         self.rightLayout.addWidget(self.cbtn_Eraser)
         self.rightLayout.addWidget(self.btn_Clear)
         self.colorLayout = QtWidgets.QHBoxLayout(self.widget2)
@@ -83,9 +95,11 @@ class Ui_MainWindow(object):
         self.colorLayout.addWidget(self.comboBox_penColor)
         self.rightLayout.addLayout(self.colorLayout)
 
+
+
         # pushButton_6 -> GO
         self.pushButton_6 = QtWidgets.QPushButton(self.frame)
-        self.pushButton_6.setGeometry(QtCore.QRect(1030, 690, 191, 61))
+        self.pushButton_6.setGeometry(870, 600, 150, 90)
         self.pushButton_6.setObjectName("pushButton_6")
         self.pushButton_6.clicked.connect(self.infer)
 
@@ -118,12 +132,12 @@ class Ui_MainWindow(object):
         self.timeLayout.addWidget(self.progress_slider)
         self.timeLayout.addWidget(self.time_label)
         self.barLayout.addSpacing(20)
-        self.barLayout.addLayout(self.horizontalLayout)
-        self.barLayout.addSpacing(50)
         self.barLayout.addLayout(self.timeLayout)
+        self.barLayout.addSpacing(30)
+        self.barLayout.addLayout(self.horizontalLayout)
 
         self.splitter = QtWidgets.QSplitter(self.frame)
-        self.splitter.setGeometry(QtCore.QRect(71, 731, 851, 20))
+        self.splitter.setGeometry(QtCore.QRect(71, 670, 750, 20))
         self.splitter.setOrientation(QtCore.Qt.Horizontal)
         self.splitter.setObjectName("splitter")
         self.label = QtWidgets.QLabel(self.splitter)
