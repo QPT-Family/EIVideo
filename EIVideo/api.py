@@ -15,9 +15,6 @@ from EIVideo.paddlevideo.utils.manet_utils import overlay_davis
 from EIVideo import TEMP_JSON_SAVE_PATH, TEMP_JSON_FINAL_PATH
 
 
-# use this
-
-
 def get_images(sequence='bike-packing'):
     img_path = os.path.join('data', sequence.strip(), 'frame')
     img_files = os.listdir(img_path)
@@ -39,12 +36,12 @@ def json2frame(path):
         frame_list = []
 
         for i in range(0, len(b_array)):
-            # im = Image.fromarray(np.uint8(b_array[i]))
-            # im = cv2.cvtColor(np.asarray(im), cv2.COLOR_RGB2BGR)
-            # img = b_array[i].copy().astype("uint8")
-            im = np.array(b_array[i]).astype("uint8")
-            im = im.transpose((2, 0, 1))
-            im = cv2.merge(im)
+            im = Image.fromarray(np.uint8(b_array[i]))
+            im = cv2.cvtColor(np.asarray(im), cv2.COLOR_RGB2BGR)
+            im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
+            # im = np.array(b_array[i]).astype("uint8")
+            # im = im.transpose((2, 0, 1))
+            # im = cv2.merge(im)
             frame_list.append(im)
     return frame_list
 
@@ -113,13 +110,11 @@ def load_video(video_path, min_side=None):
 
 
 def get_scribbles():
-    for i in range(8):
-        # ToDo To AP-kai: 常量就把它这样全局化
-        with open(TEMP_JSON_SAVE_PATH) as f:
-            print("load one_json_path success")
-            scribbles = json.load(f)
-            first_scribble = not i
-            yield scribbles, first_scribble
+    with open(TEMP_JSON_SAVE_PATH) as f:
+        print("load TEMP_JSON_SAVE_PATH success")
+        scribbles = json.load(f)
+        first_scribble = True
+        yield scribbles, first_scribble
 
 
 def submit_masks(save_path, masks, images):
