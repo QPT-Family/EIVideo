@@ -11,9 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 from .base import BaseSegment
-from .manet_stage1 import ManetSegment_Stage1
+from .manet_stage1 import Manet
 
 __all__ = [
     'BaseSegment',
-    'ManetSegment_Stage1',
+    'Manet',
 ]

@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .segment import BaseSegment, ManetSegment_Stage1
+from .segment import BaseSegment, Manet
 
 __all__ = ['BaseSegment',
-    'ManetSegment_Stage1'
+           'Manet'
 ]
