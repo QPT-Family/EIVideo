@@ -4,13 +4,17 @@
 # Please indicate the source for reprinting.
 
 
-import os
 import sys
 from QEIVideo.build_gui import BuildGUI
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QApplication
 
-if __name__ == '__main__':
+
+def run():
     app = QApplication(sys.argv)
     demo = BuildGUI()
     demo.show()
     sys.exit(app.exec())
+
+
+if __name__ == '__main__':
+    run()

@@ -6,3 +6,8 @@
 import os
 
 QEI_VIDEO_ROOT = os.path.abspath(os.path.dirname(__file__))
+
+import os
+from QEIVideo.version import __version__
+
+QEI_VIDEO_ROOT = os.path.abspath(os.path.dirname(__file__))
