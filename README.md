@@ -79,6 +79,7 @@ EIVideo，基于百度飞桨MA-Net交互式视频分割模型打造的交互式*
   ```
 * 国内推荐：
   ```shell
+  # 请勿用于Push！！！
   git clone https://hub.fastgit.org/QPT-Family/EIVideo.git
   python -m pip install -r requirements.txt -i https://mirrors.bfsu.edu.cn/pypi/web/simple
   ```
