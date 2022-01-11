@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from .IntVOS import IntVOS
-from .base import BaseHead
 
-__all__ = [
-    'BaseHead'
-    , 'IntVOS'
+__all__ = ['IntVOS'
 ]
