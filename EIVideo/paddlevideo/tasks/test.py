@@ -17,7 +17,7 @@ from EIVideo.paddlevideo.utils import get_logger, load
 from ..loader.builder import build_dataloader, build_dataset
 from ..metrics import build_metric
 from ..modeling.builder import build_model
-from ..modeling.framework import ManetSegment_Stage1
+from ..modeling.framework import Manet
 
 logger = get_logger("paddlevideo")
 
@@ -32,10 +32,10 @@ def test_model(cfg, weights, parallel=True):
         parallel (bool): Whether to do multi-cards testing. Default: True.
 
     """
-    if cfg.MODEL.framework == "ManetSegment_Stage1":
+    if cfg.MODEL.framework == "Manet":
         cfg_helper = {"knns": 1, "is_save_image": True}
         cfg.update(cfg_helper)
-        final = ManetSegment_Stage1().test_step(**cfg, weights=weights, parallel=False)
+        final = Manet().test_step(**cfg, weights=weights, parallel=False)
         return final
     if cfg.MODEL.framework == "ManetSegment_Stage2":
         cfg_helper = {"knns": 1, "is_save_image": True}

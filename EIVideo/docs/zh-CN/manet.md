@@ -47,7 +47,7 @@
 
    ```yaml
    MODEL: #MODEL field
-       framework: "ManetSegment_Stage1"
+       framework: "Manet"
        backbone:
            name: "DeepLab"
            pretrained: fill in the path here
@@ -60,7 +60,7 @@
   - 您可以通过以下命令使用一张卡开始第一阶段的训练：
 
     ```bash
-    python main.py -c configs/segmentation/manet_stage1.yaml
+    python main.py -c configs/segmentation/manet.yaml
     ```
 
   - 使用多张卡进行训练，以加快训练过程。训练开始命令如下：
@@ -68,7 +68,7 @@
     ```bash
     export CUDA_VISIBLE_DEVICES=0,1,2,3
 
-    python -B -m paddle.distributed.launch --gpus="0,1,2,3"  --log_dir=log_manet_stage1 main.py -c configs/segmentation/manet_stage1.yaml
+    python -B -m paddle.distributed.launch --gpus="0,1,2,3"  --log_dir=log_manet_stage1 main.py -c configs/segmentation/manet.yaml
     ```
 
   - 使用混合精度训练以加快训练过程。训练开始命令如下：
@@ -79,7 +79,7 @@
     export FLAGS_cudnn_batchnorm_spatial_persistent=1
 
     # frames data format
-    python3.7 -B -m paddle.distributed.launch --gpus="0,1,2,3,4" --log_dir=log_manet_stage1 main.py --amp -c configs/segmentation/manet_stage1.yaml
+    python3.7 -B -m paddle.distributed.launch --gpus="0,1,2,3,4" --log_dir=log_manet_stage1 main.py --amp -c configs/segmentation/manet.yaml
     ```
 
 - 使用第一阶段的模型训练结果，您可以使用一张卡开始训练第二阶段（其他训练方法，如多张卡或混合精度类似于上述），命令如下：

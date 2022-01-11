@@ -110,6 +110,7 @@ def load_video(video_path, min_side=None):
 
 
 def get_scribbles():
+    # os.makedirs(TEMP_JSON_SAVE_PATH, exist_ok=True)
     with open(TEMP_JSON_SAVE_PATH) as f:
         print("load TEMP_JSON_SAVE_PATH success")
         scribbles = json.load(f)

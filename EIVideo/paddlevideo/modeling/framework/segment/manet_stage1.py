@@ -31,7 +31,7 @@ from ...registry import SEGMENT
 from .base import BaseSegment
 
 
-# if cfg.MODEL.framework == "ManetSegment_Stage1":
+# if cfg.MODEL.framework == "Manet":
 #     cfg_helper = {"knns": 1,
 #                   "is_save_image": True}
 #     cfg.update(cfg_helper)
@@ -42,7 +42,7 @@ from .base import BaseSegment
 
 
 @SEGMENT.register()
-class ManetSegment_Stage1(BaseSegment):
+class Manet(BaseSegment):
     def __init__(self, backbone=None, head=None, **cfg):
         super().__init__(backbone, head, **cfg)
 
