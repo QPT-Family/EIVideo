@@ -11,6 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from EIVideo.paddlevideo.loader.builder import build_pipeline
+
+from EIVideo.paddlevideo.loader.pipelines import ToTensor_manet
+
 import os
 import timeit
 import paddle
@@ -42,7 +46,7 @@ class ManetSegment_Stage1(BaseSegment):
     def __init__(self, backbone=None, head=None, **cfg):
         super().__init__(backbone, head, **cfg)
 
-    def train_step(self, data_batch, **cfg):
+    def train_step(self, data_batch, step, **cfg):
         pass
 
     def val_step(self, data_batch, **kwargs):
