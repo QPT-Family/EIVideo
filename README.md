@@ -106,6 +106,7 @@ EIVideo，基于百度飞桨MA-Net交互式视频分割模型打造的交互式*
 - [x] EIVideo与Demo版QEIVideo发布0.1.0Alpha版本
 - [ ] 完善QEIVideo，丰富基础标注功能，于Q1升级至1.0Alpha版本
 - [ ] 回归QEIVideo稳定性，于Q2完成1.0正式版本发版
+- [ ] 增加视频目标检测、分类任务的交互式标注功能。
 
 ### 开源协议
 本项目使用GNU LESSER GENERAL PUBLIC LICENSE(LGPL)开源协议。  
