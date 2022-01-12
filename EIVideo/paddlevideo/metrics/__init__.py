@@ -13,7 +13,8 @@
 # limitations under the License.
 
 from .vos_metric import VOSMetric
+from .build import build_metric
 
 __all__ = [
-    'VOSMetric'
+    'VOSMetric', "build_metric"
 ]
