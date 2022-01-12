@@ -30,6 +30,8 @@ EIVideo，基于百度飞桨MA-Net交互式视频分割模型打造的交互式*
 
 > 为了更好的解放双手，我们还提供了图形化界面工具QEIVideo，通过它我们可以不使用繁杂的命令方式来完成视频的智能标注工作。
 
+---
+
 ### README目录
 
 - [EAP - The Early Access Program 早期访问计划](#eap---the-early-access-program-早期访问计划)
@@ -40,6 +42,8 @@ EIVideo，基于百度飞桨MA-Net交互式视频分割模型打造的交互式*
     - [开发版本 - 适合高阶开发者进行开发/社区贡献](#开发版本---适合高阶开发者进行开发社区贡献)
 - [(Q)EIVideo产品规划安排](#qeivideo产品规划安排)
 - [开源协议](#开源协议)
+
+---
 
 ### EAP - The Early Access Program 早期访问计划
 
