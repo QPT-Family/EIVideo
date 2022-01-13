@@ -69,19 +69,13 @@ _palette = [
     255, 255, 255
 ]
 
-# paddle.set_device('gpu') if paddle.is_compiled_with_cuda() else paddle.set_device('cpu')
 
-import paddle
 import PIL
-import numbers
-import numpy as np
 from PIL import Image
 from paddle.vision.transforms import BaseTransform
-from paddle.vision.transforms import functional as F
 
 import numpy as np
 from scipy.ndimage import interpolation, binary_dilation
-from skimage import morphology
 from skimage import transform
 import paddle
 import cv2

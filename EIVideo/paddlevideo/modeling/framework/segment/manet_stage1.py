@@ -131,7 +131,6 @@ class Manet(BaseSegment):
                         seen_seq = True
                         inter_turn = 1
                         embedding_memory = []
-                        places = paddle.set_device('cpu')
 
                         for imgs in images:
                             if cfg['PIPELINE'].get('test'):
