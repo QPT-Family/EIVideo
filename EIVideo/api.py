@@ -49,6 +49,7 @@ def json2frame(path):
 def png2json(image_path, sliderframenum, save_json_path):
     image = Image.open(image_path)  # 用PIL中的Image.open打开图像
     image = image.convert('P')
+    im_w, im_h = image.size
     image_arr = np.array(image)  # 转化成numpy数组
     image_arr = image_arr.astype("float32")
     r1 = np.argwhere(image_arr == 1)  # tuple
@@ -62,8 +63,8 @@ def png2json(image_path, sliderframenum, save_json_path):
         r1 = r1.astype("float32")
         # Add path to pframe
         for j in range(0, len(r1)):
-            r1[j][0] = r1[j][0] / 480.0
-            r1[j][1] = r1[j][1] / 910.0
+            r1[j][0] = r1[j][0] / im_w
+            r1[j][1] = r1[j][1] / im_w
             # r1[j] = np.around(r1[j], decimals=16)
             pframe['path'].append(r1[j].tolist())
         # Add object id, start_time, stop_time
