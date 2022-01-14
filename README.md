@@ -54,7 +54,7 @@ EIVideo，基于百度飞桨MA-Net交互式视频分割模型打造的交互式*
 当您选择使用QEIVideo作为图形化界面时，即可视为同意使用“可能会存在大量体验不佳”的EAP产品。
 
 同样，您可选择借助基于[PaddleVideo](https://github.com/PaddlePaddle/PaddleVideo) 实现的
-交互式视频标注模型[EIVideo](https://github.com/QPT-Family/EIVideo/EIVideo) 进行二次开发，在此之上也可完成您需要的自定义图形化界面，后续也将提供二次开发指南。
+交互式视频标注模型[EIVideo](https://github.com/QPT-Family/EIVideo/EIVideo) 进行二次开发，在此之上也可完成您需要的自定义图形化界面，相关使用方式详见EIVideo二次开发[中文](./EIVideo/docs/zh-CN/manet.md) | [English](./EIVideo/docs/en/manet.md) 。
 
 <div align="center"> <img width="100" alt="图片" src="https://user-images.githubusercontent.com/46156734/148928046-b1490080-52f0-4a15-b7ff-11d54b135039.png"> </div>
 
