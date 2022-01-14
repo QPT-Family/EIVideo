@@ -1,16 +1,16 @@
 # Author: Acer Zhang
-# Datetime: 2022/1/11
+# Datetime: 2022/1/14 
 # Copyright belongs to the author.
 # Please indicate the source for reprinting.
 from setuptools import setup, find_packages
-from EIVideo.version import __version__
+from QEIVideo.version import __version__
 
 
 with open('requirements.txt', encoding="utf-8-sig") as f:
     requirements = f.readlines()
 
 setup(
-    name='EIVideo',
+    name='QEIVideo',
     version=__version__,
     packages=find_packages(),
     long_description="[https://github.com/QPT-Family/EIVideo](https://github.com/QPT-Family/EIVideo)",
@@ -19,12 +19,12 @@ setup(
     license='LGPL',
     author='GT-ZhangAcer',
     author_email='zhangacer@foxmail.com',
-    description='EIVideo - 交互式智能视频标注工具，几次鼠标点击即可解放双手，让视频标注更加轻松',
+    description='QEIVideo - 交互式智能视频标注工具前端交互支持',
     install_requires=requirements,
     python_requires='>=3.7',
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            'eivideo = eivideo.main:main',
+            'qeivideo = qeivideo.start:run',
         ]}
 )

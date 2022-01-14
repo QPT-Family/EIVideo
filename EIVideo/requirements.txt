@@ -12,6 +12,6 @@ matplotlib
 paddlenlp
 lmdb
 SimpleITK
-pyqt5
 paddlevideo
 davisinteractive
+qeivideo
