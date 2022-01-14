@@ -121,7 +121,7 @@ EIVideo，基于百度飞桨MA-Net交互式视频分割模型打造的交互式*
 
 ### 开源协议
 本项目使用GNU LESSER GENERAL PUBLIC LICENSE(LGPL)开源协议。  
-> 因所使用的模型与数据集等原因，本项目中任一代码、参数均不可直接进行商用，如需商用请与我们取得联系。
+> 因所使用的模型与数据集等原因，本项目中任一代码、参数均不可直接进行商用/传播，如需授权请与我们取得联系。
 
 ### 引用来源
 1. EIVideo模型以及相关源码、论文与项目 - [PaddleVideo](https://github.com/PaddlePaddle/PaddleVideo)
