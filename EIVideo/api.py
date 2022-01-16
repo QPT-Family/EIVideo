@@ -6,6 +6,7 @@
 
 import json
 import os
+import time
 from collections import OrderedDict
 import cv2
 import numpy as np
@@ -26,33 +27,21 @@ def get_images(sequence='bike-packing'):
     return np.array(files)
 
 
-def json2frame(path):
-    print("now turn masks.json to frames", path)
-    with open(path, 'r', encoding='utf-8') as f:
-        res = f.read()
-        a = json.loads(res)
-        b = a.get('overlays')
-        b_array = np.array(b)
-        frame_list = []
-
-        for i in range(0, len(b_array)):
-            im = Image.fromarray(np.uint8(b_array[i]))
-            im = cv2.cvtColor(np.asarray(im), cv2.COLOR_RGB2BGR)
-            im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
-            # im = np.array(b_array[i]).astype("uint8")
-            # im = im.transpose((2, 0, 1))
-            # im = cv2.merge(im)
-            frame_list.append(im)
+def json2frame(arr):
+    frame_list = []
+    for i in range(0, len(arr)):
+        im = Image.fromarray(np.uint8(arr[i]))
+        im = cv2.cvtColor(np.asarray(im), cv2.COLOR_RGB2BGR)
+        im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
+        frame_list.append(im)
     return frame_list
 
 
-def png2json(image_path, sliderframenum, save_json_path):
-    image = Image.open(image_path)  # 用PIL中的Image.open打开图像
-    image = image.convert('P')
-    im_w, im_h = image.size
+def png2json(image_path, sliderframenum=0, first_scribble=False):
+    image_ = Image.open(image_path)  # 用PIL中的Image.open打开图像
+    image = image_.convert('P')
     image_arr = np.array(image)  # 转化成numpy数组
     image_arr = image_arr.astype("float32")
-    r1 = np.argwhere(image_arr == 1)  # tuple
     pframes = []
     # i -> object id
     for i in range(1, len(np.unique(image_arr))):
@@ -62,11 +51,9 @@ def png2json(image_path, sliderframenum, save_json_path):
         r1 = np.argwhere(image_arr == i)  # tuple
         r1 = r1.astype("float32")
         # Add path to pframe
-        for j in range(0, len(r1)):
-            r1[j][0] = r1[j][0] / im_w
-            r1[j][1] = r1[j][1] / im_w
-            # r1[j] = np.around(r1[j], decimals=16)
-            pframe['path'].append(r1[j].tolist())
+        r1 /= image_arr.shape
+        r1[:, [0, 1]] = r1[:, [1, 0]]
+        pframe['path'] = r1.tolist()
         # Add object id, start_time, stop_time
         pframe['object_id'] = i
         pframe['start_time'] = sliderframenum
@@ -75,17 +62,17 @@ def png2json(image_path, sliderframenum, save_json_path):
         pframes.append(pframe)
 
     dic = OrderedDict()
+    dic['first_scribble'] = first_scribble
     dic['scribbles'] = []
-    for i in range(0, int(100)):
+    for i in range(0, int(150)):
         if i == sliderframenum:
             # Add value to frame[]
             dic['scribbles'].append(pframes)
         else:
             dic['scribbles'].append([])
-
     json_str = json.dumps(dic)
-    with open(save_json_path, 'w') as json_file:
-        json_file.write(json_str)
+    with open('save.json', 'w') as f:
+        f.write(json_str)
 
 
 def load_video(video_path, min_side=None):
@@ -110,26 +97,52 @@ def load_video(video_path, min_side=None):
     return frames, frame_list
 
 
-def get_scribbles():
-    # os.makedirs(TEMP_JSON_SAVE_PATH, exist_ok=True)
-    with open(TEMP_JSON_SAVE_PATH) as f:
-        print("load TEMP_JSON_SAVE_PATH success")
-        scribbles = json.load(f)
-        first_scribble = True
-        yield scribbles, first_scribble
+def get_scribbles(client_socket):
+    from_client_msg = recv_end(client_socket)
+    from_client_msg = json.loads(from_client_msg)
+    scribbles, first_scribble = from_client_msg, from_client_msg['first_scribble']
+    return scribbles, first_scribble
 
 
-def submit_masks(save_path, masks, images):
+End = '$'
+
+
+def recv_end(the_socket):
+    total_data = []
+    while True:
+        data = the_socket.recv(8192).decode("gbk")
+        print(data)
+        if End in data:
+            total_data.append(data[:data.find(End)])
+            break
+        total_data.append(data)
+        if len(total_data) > 1:
+            # check if end_of_data was split
+            last_pair = total_data[-2] + total_data[-1]
+            if End in last_pair:
+                total_data[-2] = last_pair[:last_pair.find(End)]
+                total_data.pop()
+                break
+    return ''.join(total_data)
+
+
+def get_overlays(masks, images, save_path=None):
     overlays = []
+    masks = np.array(json.loads(masks)['masks']).astype('uint8')
     for img_name, (mask, image) in enumerate(zip(masks, images)):
         overlay = overlay_davis(image, mask)
-        overlays.append(overlay.tolist())
-        overlay = Image.fromarray(overlay)
-        img_name = str(img_name)
-        while len(img_name) < 5:
-            img_name = '0' + img_name
-        overlay.save(os.path.join(save_path, img_name + '.png'))
-    result = {'overlays': overlays}
-    # result = {'masks': masks.tolist()}
-    with open(TEMP_JSON_FINAL_PATH, 'w') as f:
-        json.dump(result, f)
+        overlays.append(overlay)
+        if save_path is not None:
+            overlay = Image.fromarray(overlay)
+            img_name = str(img_name)
+            while len(img_name) < 5:
+                img_name = '0' + img_name
+            overlay.save(os.path.join(save_path, img_name + '.png'))
+    return overlays
+
+
+def submit_masks(masks, the_socket):
+    result = json.dumps({'masks': masks.tolist()})
+    the_socket.send(bytes(result + '$', encoding="gbk"))
+    # with open(TEMP_JSON_FINAL_PATH, 'w') as f:
+    #     json.dump(result, f)

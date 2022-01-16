@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .custom_transforms_f import Resize_manet, RandomCrop_manet, RandomHorizontalFlip_manet, ToTensor_manet, \
+from .manet_pipeline import Resize_manet, RandomCrop_manet, RandomHorizontalFlip_manet, ToTensor_manet, \
     RandomScale_manet
 
 __all__ = [

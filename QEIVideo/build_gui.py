@@ -14,11 +14,11 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import cv2
 
-from EIVideo.api import json2frame, png2json, load_video
+from EIVideo.api import json2frame, png2json, load_video, recv_end, get_overlays
 from EIVideo.main import main
 # ToDo To AP-kai: 这是定义前端临时保存用于推理的json的地点之类的，因为是固定的，所以声明为全局常量是最好的
 from EIVideo import TEMP_JSON_SAVE_PATH, TEMP_IMG_SAVE_PATH, TEMP_JSON_FINAL_PATH
-
+from socket import *
 from QEIVideo.gui.ui_main_window import Ui_MainWindow
 
 
@@ -26,28 +26,50 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(BuildGUI, self).__init__()
         # ToDo To AP-kai: 这里定义当前选择的视频路径的占位符，相当于全局变量
+        self.images = None
         self.select_video_path = None
         # ToDo To AP-kai: 未来为用户提供个保存路径的入口哈，这里先随意定义了个路径
         self.save_path = "./result"
         os.makedirs(self.save_path, exist_ok=True)
         self.setupUi(self)
+        self.tcp_socket = socket(AF_INET, SOCK_STREAM)
+        serve_ip = "localhost"
+        serve_port = 8080
+        self.tcp_socket.connect((serve_ip, serve_port))
+        self.first_scribble = True
+        self.turn = 1
 
     def infer(self):
+        self.turn += 1
         self.label.setText("Start infer")
         self.progressBar.setProperty("value", 0)
-        image = self.paintBoard.get_content_as_q_image()
-        image.save(TEMP_IMG_SAVE_PATH)
-        print(self.slider_frame_num)
-        self.progressBar.setProperty("value", 25)
-        # ToDo To AP-kai:相同的文件路径，直接定义一个常量就好
-        png2json(TEMP_IMG_SAVE_PATH, self.slider_frame_num, TEMP_JSON_SAVE_PATH)
+        # image = self.paintBoard.get_content_as_q_image()
+        # image.save(TEMP_IMG_SAVE_PATH)
+        # print(self.slider_frame_num)
+        # self.progressBar.setProperty("value", 25)
+        # # ToDo To AP-kai:相同的文件路径，直接定义一个常量就好
+        # send_data = png2json(TEMP_IMG_SAVE_PATH, self.slider_frame_num, self.first_scribble, TEMP_JSON_SAVE_PATH)
+        with open(
+                '/Users/liuchen21/Library/Mobile Documents/com~apple~CloudDocs/Documents/PycharmProjects/data/DAVIS/Scribbles/blackswan/001.json',
+                'r') as f:
+            send_data = json.load(f)
+            send_data.update({'first_scribble': self.first_scribble})
+            send_data = json.dumps(send_data)
+        self.first_scribble = False
         self.progressBar.setProperty("value", 50)
         # ToDo To AP-kai:打印的信息，需要注意首字母大写
         # ToDo To AP-kai: 此处传入保存路径以及当前选择的视频路径，最后会在manet_stage1.py里通过cfg来传入
-        out = main(video_path=self.select_video_path, save_path=self.save_path)
+        # send_data = input("请输入内容：")
+        # send_data = "今天是2022年01月14日，辰姐给服务器端发送数据了"
+        self.tcp_socket.send(bytes(send_data + '$', encoding="gbk"))
+        # self.tcp_socket.send(send_data.encode("gbk"))
+
+        masks = recv_end(self.tcp_socket)
+        # overlays = get_overlays(masks, self.images, os.path.join(self.turn, '/Users/liuchen21/Library/Mobile Documents/com~apple~CloudDocs/Documents/PycharmProjects/EIVideo/QEIVideo/result'))
+        overlays = get_overlays(masks, self.images)
         print('Infer ok')
         self.progressBar.setProperty("value", 75)
-        self.all_frames = json2frame(TEMP_JSON_FINAL_PATH)
+        self.all_frames = json2frame(overlays)
         print("Success get submit_masks")
         self.open_frame()
         self.progressBar.setProperty("value", 100)
@@ -74,6 +96,8 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
             self.select_video_path, _ = QFileDialog.getOpenFileName(self.frame, "Open", "", "*.mp4;;All Files(*)")
             print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
             print("Select video file path:\t" + self.select_video_path)
+            self.images, _ = load_video(self.select_video_path, 480)
+            print("stage1 load_video success")
             # ToDo To AP-kai:下断点来看一下，如果不选择的时候返回值是什么样的，然后再做判断，目前这个if没有生效
             if self.select_video_path != "":
                 self.cap = cv2.VideoCapture(self.select_video_path)

@@ -17,9 +17,10 @@ import random
 import numpy as np
 import paddle
 
-from EIVideo.paddlevideo.tasks import (test_model)
+from EIVideo.paddlevideo.modeling.framework import Manet
 from EIVideo.paddlevideo.utils import get_config, get_dist_info
 from EIVideo import EI_VIDEO_ROOT, join_root_path
+from socket import *
 
 DEF_CONFIG_FILE_PATH = join_root_path("configs/manet.yaml")
 DEF_PARAMS_FILE_PATH = join_root_path("model/default_manet.pdparams")
@@ -87,14 +88,9 @@ def parse_args():
     return args
 
 
-def main(**kwargs):
+def main(video_path, save_path='./output'):
     args = parse_args()
     cfg = get_config(args.config, overrides=args.override)
-    # ToDo To AP-kai: 下面这行代码目的是更新配置，这样的话我们调用main(use_npu = Ture)，这时cfg.use_npu就是Ture了
-    for key, value in kwargs.items():
-        cfg.__setattr__(key, value)
-
-    # set seed if specified
     seed = args.seed
     if seed is not None:
         assert isinstance(
@@ -108,9 +104,18 @@ def main(**kwargs):
     parallel = world_size != 1
     if parallel:
         paddle.distributed.init_parallel_env()
-    final = test_model(cfg, weights=args.weights, parallel=parallel)
-    return final
+    tcp_server = socket(AF_INET, SOCK_STREAM)
+    address = ('localhost', 8080)
+    tcp_server.bind(address)
+    tcp_server.listen(128)
+    client_socket, clientAddr = tcp_server.accept()
+    cfg_helper = {"knns": 1, "is_save_image": True}
+    cfg.update(cfg_helper)
+    Manet().test_step(**cfg, save_path=save_path, video_path=video_path, weights=args.weights, parallel=parallel,
+                      client_socket=client_socket)
+    print('Inference completed')
+    client_socket.close()
 
 
 if __name__ == '__main__':
-    main(video_path='example/example1.mp4', save_path='./output')
+    main(video_path='example/swan.mp4', save_path='./output')

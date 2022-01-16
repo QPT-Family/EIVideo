@@ -56,7 +56,7 @@ class Manet(BaseSegment):
         """Define how the model is going to test, from input to output."""
         pass
 
-    def test_step(self, weights, parallel=True, is_save_image=True, **cfg):
+    def test_step(self, weights, client_socket, parallel=True, is_save_image=True, **cfg):
         # 1. Construct model.
         cfg['MODEL'].head.pretrained = ''
         cfg['MODEL'].head.test_mode = True
@@ -71,12 +71,11 @@ class Manet(BaseSegment):
         print("stage1 load_video success")
         # [195, 389, 238, 47, 244, 374, 175, 399]
         # .shape: (502, 480, 600, 3)
-        report_save_dir = cfg.get("output_dir",
-                                  f"./output/{cfg['model_name']}")
-        if not os.path.exists(report_save_dir):
-            os.makedirs(report_save_dir)
-            # Configuration used in the challenges
-        max_nb_interactions = 8  # Maximum number of interactions
+
+
+
+
+
         # Interactive parameters
         model.eval()
 
@@ -98,7 +97,8 @@ class Manet(BaseSegment):
         with paddle.no_grad():
 
             # Get the current iteration scribbles
-            for scribbles, first_scribble in get_scribbles():
+            while True:
+                scribbles, first_scribble = get_scribbles(client_socket)
                 t_total = timeit.default_timer()
                 f, h, w = images.shape[:3]
                 if 'prev_label_storage' not in locals().keys():
@@ -106,7 +106,7 @@ class Manet(BaseSegment):
                 if len(annotated_frames(scribbles)) == 0:
                     final_masks = prev_label_storage
                     # ToDo To AP-kai: save_path传过来了
-                    submit_masks(cfg["save_path"], final_masks.numpy(), images)
+                    submit_masks(final_masks.numpy(), client_socket)
                     continue
 
                 # if no scribbles return, keep masks in previous round
@@ -208,7 +208,7 @@ class Manet(BaseSegment):
                     )
                     print(paddle.unique(scribble_label))
                     final_masks = prev_label_storage
-                    submit_masks(cfg["save_path"], final_masks.numpy(), images)
+                    submit_masks(final_masks.numpy(), client_socket)
                     continue
 
                 ###inteaction segmentation head
@@ -407,10 +407,8 @@ class Manet(BaseSegment):
                 pred_masks_reverse.reverse()
                 pred_masks_reverse.extend(pred_masks)
                 final_masks = paddle.concat(pred_masks_reverse, 0)
-                submit_masks(cfg["save_path"], final_masks.numpy(), images)
+                submit_masks(final_masks.numpy(), client_socket)
 
                 t_end = timeit.default_timer()
                 print('Total time for single interaction: ' +
                       str(t_end - t_total))
-        inter_file.close()
-        return None

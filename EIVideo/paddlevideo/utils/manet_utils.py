@@ -16,6 +16,22 @@ from typing import Union, Iterable
 
 # from reprod_log.compare import compute_diff
 # from reprod_log.utils import check_print_diff, np2torch, np2paddle, torch2np, paddle2np
+def show_memory(unit='KB', threshold=1):
+    '''查看变量占用内存情况
+
+    :param unit: 显示的单位，可为`B`,`KB`,`MB`,`GB`
+    :param threshold: 仅显示内存数值大于等于threshold的变量
+    '''
+    from sys import getsizeof
+    scale = {'B': 1, 'KB': 1024, 'MB': 1048576, 'GB': 1073741824}[unit]
+    for i in list(globals().keys()):
+        memory = eval("getsizeof({})".format(i)) // scale
+        if memory >= threshold:
+            print(i, memory)
+
+
+
+
 
 _tensor_or_tensors = Union[paddle.Tensor, Iterable[paddle.Tensor]]
 _palette = [
@@ -133,7 +149,6 @@ color_map_np = np.array(color_map)
 def overlay_davis(image, mask, alpha=0.5):
     """ Overlay segmentation on top of RGB image. from davis official"""
     im_overlay = image.copy()
-    mask = mask.astype('uint8')
     colored_mask = color_map_np[mask]
     foreground = image * alpha + (1 - alpha) * colored_mask
     binary_mask = (mask > 0)
