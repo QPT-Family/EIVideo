@@ -118,4 +118,4 @@ def main(video_path, save_path='./output'):
 
 
 if __name__ == '__main__':
-    main(video_path='example/swan.mp4', save_path='./output')
+    main(video_path='example/example.mp4', save_path='./output')

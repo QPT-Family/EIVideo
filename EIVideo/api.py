@@ -130,10 +130,10 @@ def recv_end(the_socket):
 
 def get_overlays(masks, images, save_path=None):
     overlays = []
-    # masks = np.array(json.loads(masks)['masks']).astype('uint8')
+    masks = np.array(masks).astype('uint8')
     for img_name, (mask, image) in enumerate(zip(masks, images)):
         overlay = overlay_davis(image, mask)
-        overlays.append(overlay)
+        overlays.append(overlay.tolist())
         if save_path is not None:
             overlay = Image.fromarray(overlay)
             img_name = str(img_name)
@@ -145,7 +145,7 @@ def get_overlays(masks, images, save_path=None):
 
 def submit_masks(images, masks, the_socket):
     overlays = get_overlays(masks, images)
-    result = json.dumps({'overlays': overlays.tolist()})
+    result = json.dumps({'overlays': overlays})
     the_socket.send(bytes(result + '$', encoding="gbk"))
     # with open(TEMP_JSON_FINAL_PATH, 'w') as f:
     #     json.dump(result, f)

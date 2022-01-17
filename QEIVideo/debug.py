@@ -51,7 +51,7 @@ from EIVideo.paddlevideo.utils.manet_utils import _palette
 def resave_img(num=1, save_path='resave.png', json_path='/Users/liuchen21/Library/Mobile Documents/com~apple~CloudDocs/Documents/PycharmProjects/EIVideo/QEIVideo/save.json'):
     with open(json_path, 'r') as f:
         scribbles = json.load(f)
-    scribble_masks = scribbles2mask(scribbles, (500, 500), bresenham=False)
+    scribble_masks = scribbles2mask(scribbles, (480, 854), bresenham=False)
     scribble_label = scribble_masks[num]
     ref_scribble_to_show = numpy.array(scribble_label)
     print(len(np.where(ref_scribble_to_show == 1)[0]))
