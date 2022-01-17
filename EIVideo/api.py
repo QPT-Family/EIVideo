@@ -27,7 +27,8 @@ def get_images(sequence='bike-packing'):
     return np.array(files)
 
 
-def json2frame(arr):
+def json2frame(overlays):
+    arr = np.array(json.loads(overlays)['overlays']).astype('uint8')
     frame_list = []
     for i in range(0, len(arr)):
         im = Image.fromarray(np.uint8(arr[i]))
@@ -129,7 +130,7 @@ def recv_end(the_socket):
 
 def get_overlays(masks, images, save_path=None):
     overlays = []
-    masks = np.array(json.loads(masks)['masks']).astype('uint8')
+    # masks = np.array(json.loads(masks)['masks']).astype('uint8')
     for img_name, (mask, image) in enumerate(zip(masks, images)):
         overlay = overlay_davis(image, mask)
         overlays.append(overlay)
