@@ -92,7 +92,7 @@ class Manet(BaseSegment):
 
         with paddle.no_grad():
             while True:
-                print('Get the current iteration scribbles')
+                print('Getting the current iteration scribbles ......')
                 scribbles, first_scribble = get_scribbles(client_socket)
                 t_total = timeit.default_timer()
                 f, h, w = images.shape[:3]
