@@ -101,7 +101,7 @@ class Manet(BaseSegment):
                 if len(annotated_frames(scribbles)) == 0:
                     final_masks = prev_label_storage
                     # ToDo To AP-kai: save_path传过来了
-                    submit_masks(final_masks.numpy(), client_socket)
+                    submit_masks(images, final_masks.numpy(), client_socket)
                     continue
 
                 # if no scribbles return, keep masks in previous round
@@ -200,7 +200,7 @@ class Manet(BaseSegment):
                     )
                     print(paddle.unique(scribble_label))
                     final_masks = prev_label_storage
-                    submit_masks(final_masks.numpy(), client_socket)
+                    submit_masks(images, final_masks.numpy(), client_socket)
                     continue
 
                 ###inteaction segmentation head
@@ -399,7 +399,7 @@ class Manet(BaseSegment):
                 pred_masks_reverse.reverse()
                 pred_masks_reverse.extend(pred_masks)
                 final_masks = paddle.concat(pred_masks_reverse, 0)
-                submit_masks(final_masks.numpy(), client_socket)
+                submit_masks(images, final_masks.numpy(), client_socket)
 
                 t_end = timeit.default_timer()
                 print('Total time for single interaction: ' +

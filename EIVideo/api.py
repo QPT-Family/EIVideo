@@ -73,6 +73,7 @@ def png2json(image_path, sliderframenum=0, first_scribble=False):
     json_str = json.dumps(dic)
     with open('save.json', 'w') as f:
         f.write(json_str)
+    return json_str
 
 
 def load_video(video_path, min_side=None):
@@ -141,8 +142,9 @@ def get_overlays(masks, images, save_path=None):
     return overlays
 
 
-def submit_masks(masks, the_socket):
-    result = json.dumps({'masks': masks.tolist()})
+def submit_masks(images, masks, the_socket):
+    overlays = get_overlays(masks, images)
+    result = json.dumps({'overlays': overlays.tolist()})
     the_socket.send(bytes(result + '$', encoding="gbk"))
     # with open(TEMP_JSON_FINAL_PATH, 'w') as f:
     #     json.dump(result, f)

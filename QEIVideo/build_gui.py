@@ -43,18 +43,18 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         self.turn += 1
         self.label.setText("Start infer")
         self.progressBar.setProperty("value", 0)
-        # image = self.paintBoard.get_content_as_q_image()
-        # image.save(TEMP_IMG_SAVE_PATH)
-        # print(self.slider_frame_num)
+        image = self.paintBoard.get_content_as_q_image()
+        image.save(TEMP_IMG_SAVE_PATH)
+        print(self.slider_frame_num)
         # self.progressBar.setProperty("value", 25)
         # # ToDo To AP-kai:相同的文件路径，直接定义一个常量就好
-        # send_data = png2json(TEMP_IMG_SAVE_PATH, self.slider_frame_num, self.first_scribble, TEMP_JSON_SAVE_PATH)
-        with open(
-                '/Users/liuchen21/Library/Mobile Documents/com~apple~CloudDocs/Documents/PycharmProjects/data/DAVIS/Scribbles/blackswan/001.json',
-                'r') as f:
-            send_data = json.load(f)
-            send_data.update({'first_scribble': self.first_scribble})
-            send_data = json.dumps(send_data)
+        send_data = png2json(TEMP_IMG_SAVE_PATH, self.slider_frame_num, self.first_scribble)
+        # with open(
+        #         '/Users/liuchen21/Library/Mobile Documents/com~apple~CloudDocs/Documents/PycharmProjects/data/DAVIS/Scribbles/blackswan/001.json',
+        #         'r') as f:
+        #     send_data = json.load(f)
+        #     send_data.update({'first_scribble': self.first_scribble})
+        #     send_data = json.dumps(send_data)
         self.first_scribble = False
         self.progressBar.setProperty("value", 50)
         # ToDo To AP-kai:打印的信息，需要注意首字母大写
@@ -63,10 +63,7 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         # send_data = "今天是2022年01月14日，辰姐给服务器端发送数据了"
         self.tcp_socket.send(bytes(send_data + '$', encoding="gbk"))
         # self.tcp_socket.send(send_data.encode("gbk"))
-
-        masks = recv_end(self.tcp_socket)
-        # overlays = get_overlays(masks, self.images, os.path.join(self.turn, '/Users/liuchen21/Library/Mobile Documents/com~apple~CloudDocs/Documents/PycharmProjects/EIVideo/QEIVideo/result'))
-        overlays = get_overlays(masks, self.images)
+        overlays = recv_end(self.tcp_socket)
         print('Infer ok')
         self.progressBar.setProperty("value", 75)
         self.all_frames = json2frame(overlays)

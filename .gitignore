@@ -133,3 +133,4 @@ dmypy.json
 .DS_Store
 /output/
 QEIVideo/temp.png
+/QEIVideo/save.json
