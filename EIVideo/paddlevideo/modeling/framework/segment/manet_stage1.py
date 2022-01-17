@@ -88,16 +88,11 @@ class Manet(BaseSegment):
                     print(f'pretrained -----{k} -------is not in model')
         write_dict(state_dicts, 'model_for_infer.txt', **cfg)
         model.set_state_dict(state_dicts)
-        inter_file = open(
-            os.path.join(
-                cfg.get("output_dir", f"./output/{cfg['model_name']}"),
-                'inter_file.txt'), 'w')
         seen_seq = False
 
         with paddle.no_grad():
-
-            # Get the current iteration scribbles
             while True:
+                print('Get the current iteration scribbles')
                 scribbles, first_scribble = get_scribbles(client_socket)
                 t_total = timeit.default_timer()
                 f, h, w = images.shape[:3]
@@ -122,9 +117,6 @@ class Manet(BaseSegment):
 
                 else:
                     n_interaction += 1
-                inter_file.write(sequence + ' ' + 'interaction' +
-                                 str(n_interaction) + ' ' + 'frame' +
-                                 str(start_annotated_frame) + '\n')
 
                 if first_scribble:  # if in the first round, extract pixel embbedings.
                     if not seen_seq:

@@ -20,7 +20,8 @@ PIPELINE: #PIPELINE field
   test: #Mandatory, indicate the pipeline to deal with the validing data. please refer to the 'paddlevideo/loader/pipelines/'
     transform: #Mandatory, image transform operator.
       - Resize_manet:
-          output_size: [ 480, 854 ]
+          output_size: [ 480, 640 ]
+#          output_size: [ 480, 854 ]
       - ToTensor_manet:
 
 
