@@ -61,7 +61,7 @@ EIVideo，基于百度飞桨MA-Net交互式视频分割模型打造的交互式*
 
 > 如果您愿意参与到EIVideo或QEIVideo的建设中来，欢迎您与PMC取得联系 -> WX:GT_ZhangAcer  
 
-## 使用方式
+## 使用方式 - Warning 当前尚未发版，预计本周发布0.1Alpha
 ### 安装&运行
 #### QPT包 - 适合无Python基础用户
 自动化配置相关Python环境，但仅支持Windows7/10/11操作系统，且不对盗版Windows7做任何适配。  
