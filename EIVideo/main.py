@@ -88,7 +88,7 @@ def parse_args():
     return args
 
 
-def main(video_path, save_path='./output'):
+def cli(video_path, save_path='./output'):
     args = parse_args()
     cfg = get_config(args.config, overrides=args.override)
     seed = args.seed
@@ -104,8 +104,12 @@ def main(video_path, save_path='./output'):
     parallel = world_size != 1
     if parallel:
         paddle.distributed.init_parallel_env()
+
+    print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
+    print("-+-+-+-+-+服务启动成功-+-+-+-+-")
+    print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
     tcp_server = socket(AF_INET, SOCK_STREAM)
-    address = ('localhost', 8080)
+    address = ('localhost', 2336)
     tcp_server.bind(address)
     tcp_server.listen(128)
     client_socket, clientAddr = tcp_server.accept()
@@ -118,4 +122,5 @@ def main(video_path, save_path='./output'):
 
 
 if __name__ == '__main__':
-    main(video_path='example/example.mp4', save_path='./output')
+    paddle.set_device("cpu")
+    cli(video_path='example/example.mp4', save_path='./output')

@@ -66,15 +66,12 @@ class Manet(BaseSegment):
 
         # 2. Construct data.
         sequence = cfg["video_path"].split('/')[-1].split('.')[0]
+        sequence = ""
         obj_nums = 1
         images, _ = load_video(cfg["video_path"], 480)
         print("stage1 load_video success")
         # [195, 389, 238, 47, 244, 374, 175, 399]
         # .shape: (502, 480, 600, 3)
-
-
-
-
 
         # Interactive parameters
         model.eval()

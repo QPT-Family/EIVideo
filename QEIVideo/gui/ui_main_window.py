@@ -13,7 +13,6 @@ from PyQt5.QtCore import *
 from QEIVideo.widget.PaintBoard import PaintBoard
 
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("EIVideo")
@@ -53,6 +52,7 @@ class Ui_MainWindow(object):
         self.cbtn_Eraser.setParent(self.frame)
         self.cbtn_Eraser.move(950, 40)
         self.cbtn_Eraser.clicked.connect(self.on_cbtn_eraser_clicked)
+
         self.btn_Clear = QPushButton("清空画板")
         self.btn_Clear.setParent(self.frame)  # 设置父对象为本界面
         self.btn_Clear.move(950, 60)
@@ -94,8 +94,6 @@ class Ui_MainWindow(object):
         self.colorLayout.addWidget(self.label_penColor)
         self.colorLayout.addWidget(self.comboBox_penColor)
         self.rightLayout.addLayout(self.colorLayout)
-
-
 
         # pushButton_6 -> GO
         self.pushButton_6 = QtWidgets.QPushButton(self.frame)
@@ -165,5 +163,4 @@ class Ui_MainWindow(object):
         self.pushButton_2.setText(_translate("MainWindow", "Stop"))
         self.pushButton_4.setText(_translate("MainWindow", "Add"))
         self.label.setText(_translate("MainWindow", "Hi, This is EIVideo"))
-
 

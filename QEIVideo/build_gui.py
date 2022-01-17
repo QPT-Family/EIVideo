@@ -15,7 +15,7 @@ from PyQt5.QtCore import *
 import cv2
 
 from EIVideo.api import json2frame, png2json, load_video, recv_end, get_overlays
-from EIVideo.main import main
+from EIVideo.main import cli
 # ToDo To AP-kai: 这是定义前端临时保存用于推理的json的地点之类的，因为是固定的，所以声明为全局常量是最好的
 from EIVideo import TEMP_JSON_SAVE_PATH, TEMP_IMG_SAVE_PATH, TEMP_JSON_FINAL_PATH
 from socket import *
@@ -34,7 +34,7 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.tcp_socket = socket(AF_INET, SOCK_STREAM)
         serve_ip = "localhost"
-        serve_port = 8080
+        serve_port = 2336
         self.tcp_socket.connect((serve_ip, serve_port))
         self.first_scribble = True
         self.turn = 1
@@ -49,12 +49,6 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         # self.progressBar.setProperty("value", 25)
         # # ToDo To AP-kai:相同的文件路径，直接定义一个常量就好
         send_data = png2json(TEMP_IMG_SAVE_PATH, self.slider_frame_num, self.first_scribble)
-        # with open(
-        #         '/Users/liuchen21/Library/Mobile Documents/com~apple~CloudDocs/Documents/PycharmProjects/data/DAVIS/Scribbles/blackswan/001.json',
-        #         'r') as f:
-        #     send_data = json.load(f)
-        #     send_data.update({'first_scribble': self.first_scribble})
-        #     send_data = json.dumps(send_data)
         self.first_scribble = False
         self.progressBar.setProperty("value", 50)
         # ToDo To AP-kai:打印的信息，需要注意首字母大写
@@ -80,7 +74,7 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
                 self.progress_slider.setValue(self.slider_frame_num)
                 self.time_label.setText('{}/{}'.format(self.slider_frame_num, self.cap.get(7)))
             self.timer_camera = QTimer()  # 定义定时器
-            self.timer_camera.start(1000 / self.cap.get(cv2.CAP_PROP_FPS))
+            self.timer_camera.start(1000 // self.cap.get(cv2.CAP_PROP_FPS))
             self.slider_frame_num = self.progress_slider.value()
             self.timer_camera.timeout.connect(self.open_frame)
 
@@ -101,7 +95,7 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
                 # 存所有frame
                 self.save_temp_frame()
                 print("save temp frame done")
-                self.progress_slider.setRange(0, self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
+                self.progress_slider.setRange(0, int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT)))
                 self.slider_frame_num = 0
                 self.open_frame()
 
