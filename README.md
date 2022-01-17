@@ -6,7 +6,7 @@
 ![GitHub forks](https://img.shields.io/github/forks/QPT-Family/EIVideo)
 ![GitHub Repo stars](https://img.shields.io/github/stars/QPT-Family/EIVideo)
 ![GitHub](https://img.shields.io/github/license/QPT-Family/EIVideo)
-![](https://img.shields.io/badge/%E6%B7%B1%E5%BA%A6%E9%80%82%E9%85%8D->Win7-9cf)
+![](https://img.shields.io/badge/OS-Linux|MAC|Win7+-9cf)
 [![QQGroup](https://img.shields.io/badge/QQ群-441226485-9cf?logo=tencent-qq&logoColor=000&logoWidth=15)](https://jq.qq.com/?_wv=1027&k=Z6G9YmzQ)
 
 ---
