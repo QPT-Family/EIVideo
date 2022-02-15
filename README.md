@@ -99,7 +99,7 @@ EIVideo，基于百度飞桨MA-Net交互式视频分割模型打造的交互式*
   # 进入工作目录
   cd 此处填写EIVideo所在的目录的绝对路径，且该目录下拥有EIVideo与QEIVideo两文件夹。
   # 运行
-  python QEIVideo/start.py
+  python QEIVideo/__main__.py
   
   # 如运行时无法找到对应包，可选择下述方式添加环境变量来调整索引次序后执行python
   # Windows

@@ -80,3 +80,109 @@
 [01/17 11:27:31] main proc 32908 exit, kill process group 32663
 [01/17 11:31:46] main proc 33480 exit, kill process group 33196
 [01/17 12:10:55] main proc 34140 exit, kill process group 33864
+[02/15 14:37:16] [35mMODEL[0m : 
+[02/15 14:37:16]     [35mbackbone[0m : 
+[02/15 14:37:16]         [35mbackbone[0m : [92mresnet[0m
+[02/15 14:37:16]         [35mfreeze_bn[0m : [92mFalse[0m
+[02/15 14:37:16]         [35mname[0m : [92mDeepLab[0m
+[02/15 14:37:16]         [35mnum_classes[0m : [92m21[0m
+[02/15 14:37:16]         [35moutput_stride[0m : [92m16[0m
+[02/15 14:37:16]     [35mframework[0m : [92mManet[0m
+[02/15 14:37:16]     [35mhead[0m : 
+[02/15 14:37:16]         [35mmodel_aspp_outdim[0m : [92m256[0m
+[02/15 14:37:16]         [35mmodel_head_embedding_dim[0m : [92m256[0m
+[02/15 14:37:16]         [35mmodel_max_local_distance[0m : [92m12[0m
+[02/15 14:37:16]         [35mmodel_semantic_embedding_dim[0m : [92m100[0m
+[02/15 14:37:16]         [35mmodel_useintseg[0m : [92mFalse[0m
+[02/15 14:37:16]         [35mname[0m : [92mIntVOS[0m
+[02/15 14:37:16]         [35mtest_mode[0m : [92mFalse[0m
+[02/15 14:37:16]         [35mtrain_bn_mom[0m : [92m0.9997[0m
+[02/15 14:37:16] ------------------------------------------------------------
+[02/15 14:37:16] [35mPIPELINE[0m : 
+[02/15 14:37:16]     [35mtest[0m : 
+[02/15 14:37:16]         [35mtransform[0m : 
+[02/15 14:37:16]             [35mResize_manet[0m : 
+[02/15 14:37:16]                 [35moutput_size[0m : [92m[480, 854][0m
+[02/15 14:37:16]             [35mToTensor_manet[0m : [92mNone[0m
+[02/15 14:37:16] ------------------------------------------------------------
+[02/15 14:37:16] [35mmodel_name[0m : [92mManet[0m
+[02/15 14:37:29] main proc 24221 exit, kill process group 7892
+[02/15 14:40:56] [35mMODEL[0m : 
+[02/15 14:40:56]     [35mbackbone[0m : 
+[02/15 14:40:56]         [35mbackbone[0m : [92mresnet[0m
+[02/15 14:40:56]         [35mfreeze_bn[0m : [92mFalse[0m
+[02/15 14:40:56]         [35mname[0m : [92mDeepLab[0m
+[02/15 14:40:56]         [35mnum_classes[0m : [92m21[0m
+[02/15 14:40:56]         [35moutput_stride[0m : [92m16[0m
+[02/15 14:40:56]     [35mframework[0m : [92mManet[0m
+[02/15 14:40:56]     [35mhead[0m : 
+[02/15 14:40:56]         [35mmodel_aspp_outdim[0m : [92m256[0m
+[02/15 14:40:56]         [35mmodel_head_embedding_dim[0m : [92m256[0m
+[02/15 14:40:56]         [35mmodel_max_local_distance[0m : [92m12[0m
+[02/15 14:40:56]         [35mmodel_semantic_embedding_dim[0m : [92m100[0m
+[02/15 14:40:56]         [35mmodel_useintseg[0m : [92mFalse[0m
+[02/15 14:40:56]         [35mname[0m : [92mIntVOS[0m
+[02/15 14:40:56]         [35mtest_mode[0m : [92mFalse[0m
+[02/15 14:40:56]         [35mtrain_bn_mom[0m : [92m0.9997[0m
+[02/15 14:40:56] ------------------------------------------------------------
+[02/15 14:40:56] [35mPIPELINE[0m : 
+[02/15 14:40:56]     [35mtest[0m : 
+[02/15 14:40:56]         [35mtransform[0m : 
+[02/15 14:40:56]             [35mResize_manet[0m : 
+[02/15 14:40:56]                 [35moutput_size[0m : [92m[480, 854][0m
+[02/15 14:40:56]             [35mToTensor_manet[0m : [92mNone[0m
+[02/15 14:40:56] ------------------------------------------------------------
+[02/15 14:40:56] [35mmodel_name[0m : [92mManet[0m
+[02/15 14:42:39] main proc 24940 exit, kill process group 24236
+[02/15 14:44:03] [35mMODEL[0m : 
+[02/15 14:44:03]     [35mbackbone[0m : 
+[02/15 14:44:03]         [35mbackbone[0m : [92mresnet[0m
+[02/15 14:44:03]         [35mfreeze_bn[0m : [92mFalse[0m
+[02/15 14:44:03]         [35mname[0m : [92mDeepLab[0m
+[02/15 14:44:03]         [35mnum_classes[0m : [92m21[0m
+[02/15 14:44:03]         [35moutput_stride[0m : [92m16[0m
+[02/15 14:44:03]     [35mframework[0m : [92mManet[0m
+[02/15 14:44:03]     [35mhead[0m : 
+[02/15 14:44:03]         [35mmodel_aspp_outdim[0m : [92m256[0m
+[02/15 14:44:03]         [35mmodel_head_embedding_dim[0m : [92m256[0m
+[02/15 14:44:03]         [35mmodel_max_local_distance[0m : [92m12[0m
+[02/15 14:44:03]         [35mmodel_semantic_embedding_dim[0m : [92m100[0m
+[02/15 14:44:03]         [35mmodel_useintseg[0m : [92mFalse[0m
+[02/15 14:44:03]         [35mname[0m : [92mIntVOS[0m
+[02/15 14:44:03]         [35mtest_mode[0m : [92mFalse[0m
+[02/15 14:44:03]         [35mtrain_bn_mom[0m : [92m0.9997[0m
+[02/15 14:44:03] ------------------------------------------------------------
+[02/15 14:44:03] [35mPIPELINE[0m : 
+[02/15 14:44:03]     [35mtest[0m : 
+[02/15 14:44:03]         [35mtransform[0m : 
+[02/15 14:44:03]             [35mResize_manet[0m : 
+[02/15 14:44:03]                 [35moutput_size[0m : [92m[480, 854][0m
+[02/15 14:44:03]             [35mToTensor_manet[0m : [92mNone[0m
+[02/15 14:44:03] ------------------------------------------------------------
+[02/15 14:44:03] [35mmodel_name[0m : [92mManet[0m
+[02/15 14:47:57] [35mMODEL[0m : 
+[02/15 14:47:57]     [35mbackbone[0m : 
+[02/15 14:47:57]         [35mbackbone[0m : [92mresnet[0m
+[02/15 14:47:57]         [35mfreeze_bn[0m : [92mFalse[0m
+[02/15 14:47:57]         [35mname[0m : [92mDeepLab[0m
+[02/15 14:47:57]         [35mnum_classes[0m : [92m21[0m
+[02/15 14:47:57]         [35moutput_stride[0m : [92m16[0m
+[02/15 14:47:57]     [35mframework[0m : [92mManet[0m
+[02/15 14:47:57]     [35mhead[0m : 
+[02/15 14:47:57]         [35mmodel_aspp_outdim[0m : [92m256[0m
+[02/15 14:47:57]         [35mmodel_head_embedding_dim[0m : [92m256[0m
+[02/15 14:47:57]         [35mmodel_max_local_distance[0m : [92m12[0m
+[02/15 14:47:57]         [35mmodel_semantic_embedding_dim[0m : [92m100[0m
+[02/15 14:47:57]         [35mmodel_useintseg[0m : [92mFalse[0m
+[02/15 14:47:57]         [35mname[0m : [92mIntVOS[0m
+[02/15 14:47:57]         [35mtest_mode[0m : [92mFalse[0m
+[02/15 14:47:57]         [35mtrain_bn_mom[0m : [92m0.9997[0m
+[02/15 14:47:57] ------------------------------------------------------------
+[02/15 14:47:57] [35mPIPELINE[0m : 
+[02/15 14:47:57]     [35mtest[0m : 
+[02/15 14:47:57]         [35mtransform[0m : 
+[02/15 14:47:57]             [35mResize_manet[0m : 
+[02/15 14:47:57]                 [35moutput_size[0m : [92m[480, 854][0m
+[02/15 14:47:57]             [35mToTensor_manet[0m : [92mNone[0m
+[02/15 14:47:57] ------------------------------------------------------------
+[02/15 14:47:57] [35mmodel_name[0m : [92mManet[0m

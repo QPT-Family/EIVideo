@@ -3,13 +3,14 @@
 # Copyright belongs to the author.
 # Please indicate the source for reprinting.
 
-
+import multiprocessing
 import sys
 from QEIVideo.build_gui import BuildGUI
 from PyQt5.QtWidgets import QApplication
 
 
 def run():
+    multiprocessing.freeze_support()
     app = QApplication(sys.argv)
     demo = BuildGUI()
     demo.show()

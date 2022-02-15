@@ -5,6 +5,7 @@
 import json
 import os
 import sys
+import time
 
 import numpy as np
 from PIL import Image
@@ -198,9 +199,10 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
             self.tcp_socket.close()
 
         self.progress = QProcess()
-        cli = f"{PYTHON_PATH} -m eivideo -v {video_path}"
+        cli = f"{PYTHON_PATH} -m EIVideo -v {video_path}"
         print(cli)
         self.progress.start(cli)
+        time.sleep(10)
         serve_ip = "localhost"
         serve_port = 2333
         self.tcp_socket = socket(AF_INET, SOCK_STREAM)
