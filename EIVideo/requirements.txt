@@ -3,7 +3,7 @@ pandas
 tqdm
 PyYAML>=5.1
 opencv-python==4.2.0.32
-decord==0.4.2
+decord
 av==8.0.3
 scipy==1.6.3
 ffmpeg-python==0.2.0
