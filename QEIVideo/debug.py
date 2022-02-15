@@ -48,7 +48,7 @@ def png2json(image_path, sliderframenum=0, first_scribble=False):
 from EIVideo.paddlevideo.utils.manet_utils import _palette
 
 
-def resave_img(num=1, save_path='resave.png', json_path='/Users/liuchen21/Library/Mobile Documents/com~apple~CloudDocs/Documents/PycharmProjects/EIVideo/QEIVideo/save.json'):
+def resave_img(num=1, save_path='resave.png', json_path='save.json'):
     with open(json_path, 'r') as f:
         scribbles = json.load(f)
     scribble_masks = scribbles2mask(scribbles, (480, 854), bresenham=False)
@@ -62,7 +62,6 @@ def resave_img(num=1, save_path='resave.png', json_path='/Users/liuchen21/Librar
     im_.save(save_path)
 
 
-# png2json(
-#     '/Users/liuchen21/Library/Mobile Documents/com~apple~CloudDocs/Documents/PycharmProjects/EIVideo/output/Manet/swan/interactive1/turn1/inter_25.png')
-resave_img()
+png2json('inter_25.png')
+# resave_img()
 # resave_img(save_path='right.png', json_path='/Users/liuchen21/Desktop/001.json', num=25)

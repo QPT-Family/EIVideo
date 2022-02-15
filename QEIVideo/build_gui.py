@@ -4,6 +4,7 @@
 # Please indicate the source for reprinting.
 import json
 import os
+import sys
 
 import numpy as np
 from PIL import Image
@@ -14,12 +15,22 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import cv2
 
+import EIVideo
 from EIVideo.api import json2frame, png2json, load_video, recv_end, get_overlays
-from EIVideo.main import cli
 # ToDo To AP-kai: 这是定义前端临时保存用于推理的json的地点之类的，因为是固定的，所以声明为全局常量是最好的
 from EIVideo import TEMP_JSON_SAVE_PATH, TEMP_IMG_SAVE_PATH, TEMP_JSON_FINAL_PATH
 from socket import *
 from QEIVideo.gui.ui_main_window import Ui_MainWindow
+
+PYTHON_PATH = sys.executable
+
+EIVideo_ROOT = os.path.dirname(EIVideo.__file__)
+MODEL_PATH = os.path.join(EIVideo_ROOT, "model/default_manet.pdparams")
+if not os.path.exists(MODEL_PATH):
+    import wget
+
+    print("正在下载模型文件")
+    wget.download("https://videotag.bj.bcebos.com/PaddleVideo-release2.2/MANet_EIVideo.pdparams", MODEL_PATH)
 
 
 class BuildGUI(QMainWindow, Ui_MainWindow):
@@ -32,12 +43,20 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         self.save_path = "./result"
         os.makedirs(self.save_path, exist_ok=True)
         self.setupUi(self)
-        self.tcp_socket = socket(AF_INET, SOCK_STREAM)
-        serve_ip = "localhost"
-        serve_port = 2336
-        self.tcp_socket.connect((serve_ip, serve_port))
+
         self.first_scribble = True
         self.turn = 1
+
+        # 推理进程
+        self.progress = None
+
+        QMessageBox.information(self,
+                                "使用必读",
+                                "当前程式为示例程式，仅供模型效果演示，且未对操作系统、硬件进行强制限制，"
+                                "可能会因环境而造成意料之外/无法正确使用的情况。\n"
+                                "目前我们正在设计新版本EIVideo来提供更好的使用体验，也欢迎通过GitHub issue的形式联系并加入我们~\n"
+                                "https://github.com/QPT-Family/EIVideo",
+                                QMessageBox.Yes)
 
     def infer(self):
         self.turn += 1
@@ -99,7 +118,13 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
                 self.slider_frame_num = 0
                 self.open_frame()
 
+            self.run_progress(self.select_video_path)
+
             # ToDo To AP-kai: 未来这个地方增加提示框，告诉他没有选择文件
+
+            # 若推理进程已存在，则Kill
+            if self.progress is not None:
+                self.progress.kill()
 
     def on_cbtn_eraser_clicked(self):
         self.label.setText("Eraser On")
@@ -164,3 +189,18 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         self.time_label.setText('{}/{}'.format(self.slider_frame_num, self.cap.get(7)))
         if self.progress_slider.value() == self.cap.get(7) - 1:
             self.slot_stop()
+
+    def run_progress(self, video_path):
+        if self.progress is not None:
+            self.progress.kill()
+            self.tcp_socket.shutdown(2)
+            self.tcp_socket.close()
+
+        self.progress = QProcess()
+        cli = f"{PYTHON_PATH} -m eivideo -v {video_path}"
+        print(cli)
+        self.progress.start(cli)
+        serve_ip = "localhost"
+        serve_port = 2333
+        self.tcp_socket = socket(AF_INET, SOCK_STREAM)
+        self.tcp_socket.connect((serve_ip, serve_port))

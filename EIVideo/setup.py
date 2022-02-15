@@ -3,15 +3,13 @@
 # Copyright belongs to the author.
 # Please indicate the source for reprinting.
 from setuptools import setup, find_packages
-from EIVideo.version import __version__
-
 
 with open('requirements.txt', encoding="utf-8-sig") as f:
     requirements = f.readlines()
 
 setup(
     name='EIVideo',
-    version=__version__,
+    version="0.1a",
     packages=find_packages(),
     long_description="[https://github.com/QPT-Family/EIVideo](https://github.com/QPT-Family/EIVideo)",
     long_description_content_type='text/markdown',
