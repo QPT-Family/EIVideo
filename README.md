@@ -72,12 +72,12 @@ EIVideo，基于百度飞桨MA-Net交互式视频分割模型打造的交互式*
 * 国际方式：
   ```shell
   python -m pip install eivideo
-  python qeivideo
+  python -m qeivideo
   ```
 * 国内推荐：
   ```shell
   python -m pip install eivideo -i https://mirrors.bfsu.edu.cn/pypi/web/simple
-  python qeivideo
+  python -m qeivideo
   ```
 > 上述命令仅适用于常规情况，若您安装了多个Python或修改了相关开发工具与配置，请自行修改相关命令使其符合您的开发环境。
 

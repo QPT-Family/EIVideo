@@ -21,9 +21,5 @@ setup(
     description='QEIVideo - 交互式智能视频标注工具前端交互支持',
     install_requires=requirements,
     python_requires='>=3.7',
-    include_package_data=True,
-    entry_points={
-        'console_scripts': [
-            'qeivideo = qeivideo.start:run',
-        ]}
+    include_package_data=True
 )

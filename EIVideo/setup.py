@@ -20,9 +20,5 @@ setup(
     description='EIVideo - 交互式智能视频标注工具，几次鼠标点击即可解放双手，让视频标注更加轻松',
     install_requires=requirements,
     python_requires='>=3.7',
-    include_package_data=True,
-    entry_points={
-        'console_scripts': [
-            'eivideo = eivideo.main:cli',
-        ]}
+    include_package_data=True
 )
