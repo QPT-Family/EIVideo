@@ -28,7 +28,8 @@ EIVideo_ROOT = os.path.dirname(EIVideo.__file__)
 MODEL_PATH = os.path.join(EIVideo_ROOT, "model/default_manet.pdparams")
 if not os.path.exists(MODEL_PATH):
     import wget
-
+    import ssl
+    ssl._create_default_https_context = ssl._create_unverified_context
     print("正在下载模型文件")
     wget.download("https://videotag.bj.bcebos.com/PaddleVideo-release2.2/MANet_EIVideo.pdparams", MODEL_PATH)
 

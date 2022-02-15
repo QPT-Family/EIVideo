@@ -23,7 +23,7 @@ from EIVideo import EI_VIDEO_ROOT, join_root_path
 from socket import *
 
 DEF_CONFIG_FILE_PATH = join_root_path("configs/manet.yaml")
-DEF_PARAMS_FILE_PATH = join_root_path("model/default_manet.pdparams")
+DEF_PARAMS_FILE_PATH = join_root_path("model/default_manet1.pdparams")
 
 
 def parse_args():
