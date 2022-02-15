@@ -1,1 +1,2 @@
 recursive-include configs
+recursive-include requirements.txt
