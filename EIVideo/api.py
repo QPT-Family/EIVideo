@@ -27,7 +27,7 @@ def get_images(sequence='bike-packing'):
 
 
 def json2frame(path):
-    print("now turn masks.json to frames", path)
+    print("now turn masks.json to frames")
     with open(path, 'r', encoding='utf-8') as f:
         res = f.read()
         a = json.loads(res)
@@ -46,13 +46,11 @@ def json2frame(path):
     return frame_list
 
 
-def png2json(image_path, sliderframenum, save_json_path):
-    image = Image.open(image_path)  # 用PIL中的Image.open打开图像
-    image = image.convert('P')
-    im_w, im_h = image.size
+def png2json(image_path, sliderframenum=0, first_scribble=False):
+    image_ = Image.open(image_path)  # 用PIL中的Image.open打开图像
+    image = image_.convert('P')
     image_arr = np.array(image)  # 转化成numpy数组
     image_arr = image_arr.astype("float32")
-    r1 = np.argwhere(image_arr == 1)  # tuple
     pframes = []
     # i -> object id
     for i in range(1, len(np.unique(image_arr))):
@@ -62,11 +60,9 @@ def png2json(image_path, sliderframenum, save_json_path):
         r1 = np.argwhere(image_arr == i)  # tuple
         r1 = r1.astype("float32")
         # Add path to pframe
-        for j in range(0, len(r1)):
-            r1[j][0] = r1[j][0] / im_w
-            r1[j][1] = r1[j][1] / im_w
-            # r1[j] = np.around(r1[j], decimals=16)
-            pframe['path'].append(r1[j].tolist())
+        r1 /= image_arr.shape
+        r1[:, [0, 1]] = r1[:, [1, 0]]
+        pframe['path'] = r1.tolist()
         # Add object id, start_time, stop_time
         pframe['object_id'] = i
         pframe['start_time'] = sliderframenum
@@ -75,24 +71,23 @@ def png2json(image_path, sliderframenum, save_json_path):
         pframes.append(pframe)
 
     dic = OrderedDict()
+    dic['first_scribble'] = first_scribble
     dic['scribbles'] = []
-    for i in range(0, int(100)):
+    for i in range(0, int(150)):
         if i == sliderframenum:
             # Add value to frame[]
             dic['scribbles'].append(pframes)
         else:
             dic['scribbles'].append([])
-
     json_str = json.dumps(dic)
-    with open(save_json_path, 'w') as json_file:
-        json_file.write(json_str)
+    with open('save.json', 'w') as f:
+        f.write(json_str)
+    return json_str
 
 
 def load_video(video_path, min_side=None):
     frame_list = []
-    # ToDo To AP-kai: 是不是轻松干掉了m.video_path？
     cap = cv2.VideoCapture(video_path)
-    # ToDo To AP-kai: while (cap.isOpened()): -> 不必多写个括号哈
     while cap.isOpened():
         _, frame = cap.read()
         if frame is None:

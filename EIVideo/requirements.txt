@@ -15,3 +15,6 @@ SimpleITK
 paddlevideo
 davisinteractive
 qeivideo
+flask
+flask_bootstrap
+wget

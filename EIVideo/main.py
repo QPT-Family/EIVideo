@@ -17,12 +17,25 @@ import random
 import numpy as np
 import paddle
 
+from EIVideo.paddlevideo.modeling.framework import Manet
 from EIVideo.paddlevideo.tasks import (test_model)
 from EIVideo.paddlevideo.utils import get_config, get_dist_info
 from EIVideo import EI_VIDEO_ROOT, join_root_path
 
+from flask import Flask, render_template, request, flash, redirect, url_for, make_response
+from flask_bootstrap import Bootstrap
+import os
+import json
+
 DEF_CONFIG_FILE_PATH = join_root_path("configs/manet.yaml")
 DEF_PARAMS_FILE_PATH = join_root_path("model/default_manet.pdparams")
+
+app = Flask(__name__)
+bootstrap = Bootstrap(app)
+app.config['SECRET_KEY'] = os.urandom(24)
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+uploadDir = os.path.join(basedir, 'static/uploads')
 
 
 def parse_args():
@@ -87,12 +100,10 @@ def parse_args():
     return args
 
 
-def main(**kwargs):
+def start_infer(video_path='EIVideo/example/example.mp4', save_path='./output'):
+    paddle.set_device("gpu")
     args = parse_args()
     cfg = get_config(args.config, overrides=args.override)
-    # ToDo To AP-kai: 下面这行代码目的是更新配置，这样的话我们调用main(use_npu = Ture)，这时cfg.use_npu就是Ture了
-    for key, value in kwargs.items():
-        cfg.__setattr__(key, value)
 
     # set seed if specified
     seed = args.seed
@@ -108,9 +119,33 @@ def main(**kwargs):
     parallel = world_size != 1
     if parallel:
         paddle.distributed.init_parallel_env()
-    final = test_model(cfg, weights=args.weights, parallel=parallel)
-    return final
+
+    print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
+    print("-+-+-+-+-+服务启动成功-+-+-+-+-")
+    print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
+    cfg_helper = {"knns": 1, "is_save_image": True}
+    cfg.update(cfg_helper)
+
+    Manet().test_step(**cfg, save_path=save_path, video_path=video_path, weights=args.weights, parallel=parallel,
+                      )
+
+
+@app.route('/', methods=['GET'])
+def hello():
+    return "hello world"
+
+
+@app.route('/infer', methods=['GET', 'POST'])
+def infer():
+    if request.method == 'POST':
+        data = request.get_data()
+        json_data = json.loads(data.decode("utf-8"))
+        video_path = json_data.get("video_path")
+        save_path = json_data.get("save_path")
+        start_infer(video_path=video_path, save_path=save_path)
+        return 'server infer done'
 
 
 if __name__ == '__main__':
-    main(video_path='example/example1.mp4', save_path='./output')
+    paddle.set_device("gpu")
+    app.run(debug=True)

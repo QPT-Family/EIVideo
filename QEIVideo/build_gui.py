@@ -1,11 +1,12 @@
-# Author: Acer Zhang
-# Datetime:2022/1/11 
+# Author: AP-Kai
+# Datetime:2022/2/17
 # Copyright belongs to the author.
 # Please indicate the source for reprinting.
 import json
 import os
 
 import numpy as np
+import requests
 from PIL import Image
 
 from PyQt5 import QtCore, QtWidgets
@@ -15,8 +16,6 @@ from PyQt5.QtCore import *
 import cv2
 
 from EIVideo.api import json2frame, png2json, load_video
-from EIVideo.main import main
-# ToDo To AP-kai: 这是定义前端临时保存用于推理的json的地点之类的，因为是固定的，所以声明为全局常量是最好的
 from EIVideo import TEMP_JSON_SAVE_PATH, TEMP_IMG_SAVE_PATH, TEMP_JSON_FINAL_PATH
 
 from QEIVideo.gui.ui_main_window import Ui_MainWindow
@@ -25,11 +24,10 @@ from QEIVideo.gui.ui_main_window import Ui_MainWindow
 class BuildGUI(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(BuildGUI, self).__init__()
-        # ToDo To AP-kai: 这里定义当前选择的视频路径的占位符，相当于全局变量
         self.select_video_path = None
-        # ToDo To AP-kai: 未来为用户提供个保存路径的入口哈，这里先随意定义了个路径
         self.save_path = "./result"
         os.makedirs(self.save_path, exist_ok=True)
+
         self.setupUi(self)
 
     def infer(self):
@@ -39,12 +37,15 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         image.save(TEMP_IMG_SAVE_PATH)
         print(self.slider_frame_num)
         self.progressBar.setProperty("value", 25)
-        # ToDo To AP-kai:相同的文件路径，直接定义一个常量就好
         png2json(TEMP_IMG_SAVE_PATH, self.slider_frame_num, TEMP_JSON_SAVE_PATH)
         self.progressBar.setProperty("value", 50)
-        # ToDo To AP-kai:打印的信息，需要注意首字母大写
-        # ToDo To AP-kai: 此处传入保存路径以及当前选择的视频路径，最后会在manet_stage1.py里通过cfg来传入
-        out = main(video_path=self.select_video_path, save_path=self.save_path)
+
+        paths = {"video_path": self.select_video_path,
+                 "save_path": self.save_path
+        }
+        paths_json = json.dumps(paths)
+        r = requests.post("http://127.0.0.1:5000/infer", data=paths_json)
+
         print('Infer ok')
         self.progressBar.setProperty("value", 75)
         self.all_frames = json2frame(TEMP_JSON_FINAL_PATH)
@@ -71,7 +72,7 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
 
         elif btn == self.pushButton_4:
             self.label.setText("Choose video")
-            self.select_video_path, _ = QFileDialog.getOpenFileName(self.frame, "Open", "", "*.mp4;;All Files(*)")
+            self.select_video_path, _ = QFileDialog.getOpenFileName(self, "Open", "", "*.mp4;;All Files(*)")
             print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
             print("Select video file path:\t" + self.select_video_path)
             # ToDo To AP-kai:下断点来看一下，如果不选择的时候返回值是什么样的，然后再做判断，目前这个if没有生效
@@ -131,7 +132,6 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         if self.cap != []:
             self.timer_camera.stop()  # 停止计时器
         else:
-            # ToDo To AP-kai: QMessageBox.warning没有返回值，这里我把Warming = QMessageBox.warning的Warming删去了
             QMessageBox.warning(self, "Warming", "Push the left upper corner button to Quit.",
                                 QMessageBox.Yes)
 

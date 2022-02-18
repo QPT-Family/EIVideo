@@ -105,7 +105,6 @@ class Manet(BaseSegment):
                     prev_label_storage = paddle.zeros([f, h, w])
                 if len(annotated_frames(scribbles)) == 0:
                     final_masks = prev_label_storage
-                    # ToDo To AP-kai: save_path传过来了
                     submit_masks(cfg["save_path"], final_masks.numpy(), images)
                     continue
 
