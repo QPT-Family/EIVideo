@@ -56,7 +56,7 @@ class Manet(BaseSegment):
         """Define how the model is going to test, from input to output."""
         pass
 
-    def test_step(self, weights, parallel=True, is_save_image=True, **cfg):
+    def test_step(self, weights, parallel=True, is_save_image=True, json_scribbles=None, **cfg):
         # 1. Construct model.
         cfg['MODEL'].head.pretrained = ''
         cfg['MODEL'].head.test_mode = True
@@ -98,7 +98,7 @@ class Manet(BaseSegment):
         with paddle.no_grad():
 
             # Get the current iteration scribbles
-            for scribbles, first_scribble in get_scribbles():
+            for scribbles, first_scribble in get_scribbles(json_scribbles):
                 t_total = timeit.default_timer()
                 f, h, w = images.shape[:3]
                 if 'prev_label_storage' not in locals().keys():

@@ -15,7 +15,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import cv2
 
-from EIVideo.api import json2frame, png2json, load_video
+from EIVideo.api import json2frame, png2dic, load_video
 from EIVideo import TEMP_JSON_SAVE_PATH, TEMP_IMG_SAVE_PATH, TEMP_JSON_FINAL_PATH
 
 from QEIVideo.gui.ui_main_window import Ui_MainWindow
@@ -30,6 +30,10 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
 
         self.setupUi(self)
 
+    def merge(dict1, dict2):
+        res = {**dict1, **dict2}
+        return res
+
     def infer(self):
         self.label.setText("Start infer")
         self.progressBar.setProperty("value", 0)
@@ -37,18 +41,20 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         image.save(TEMP_IMG_SAVE_PATH)
         print(self.slider_frame_num)
         self.progressBar.setProperty("value", 25)
-        png2json(TEMP_IMG_SAVE_PATH, self.slider_frame_num, TEMP_JSON_SAVE_PATH)
+        dic_str = png2dic(TEMP_IMG_SAVE_PATH, self.slider_frame_num)
         self.progressBar.setProperty("value", 50)
+        paths2 = {"video_path": self.select_video_path,
+                  "save_path": self.save_path,
+                  "params": dic_str}
 
-        paths = {"video_path": self.select_video_path,
-                 "save_path": self.save_path
-        }
-        paths_json = json.dumps(paths)
+        paths_json = json.dumps(paths2)
         r = requests.post("http://127.0.0.1:5000/infer", data=paths_json)
 
         print('Infer ok')
         self.progressBar.setProperty("value", 75)
+
         self.all_frames = json2frame(TEMP_JSON_FINAL_PATH)
+
         print("Success get submit_masks")
         self.open_frame()
         self.progressBar.setProperty("value", 100)

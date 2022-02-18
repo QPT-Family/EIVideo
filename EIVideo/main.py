@@ -100,7 +100,7 @@ def parse_args():
     return args
 
 
-def start_infer(video_path='EIVideo/example/example.mp4', save_path='./output'):
+def start_infer(video_path='EIVideo/example/example.mp4', save_path='./output', json_scribbles=None):
     paddle.set_device("gpu")
     args = parse_args()
     cfg = get_config(args.config, overrides=args.override)
@@ -127,6 +127,7 @@ def start_infer(video_path='EIVideo/example/example.mp4', save_path='./output'):
     cfg.update(cfg_helper)
 
     Manet().test_step(**cfg, save_path=save_path, video_path=video_path, weights=args.weights, parallel=parallel,
+                      json_scribbles=json_scribbles
                       )
 
 
@@ -142,7 +143,8 @@ def infer():
         json_data = json.loads(data.decode("utf-8"))
         video_path = json_data.get("video_path")
         save_path = json_data.get("save_path")
-        start_infer(video_path=video_path, save_path=save_path)
+        json_scribbles = json_data.get("params")
+        start_infer(video_path=video_path, save_path=save_path, json_scribbles=json_scribbles)
         return 'server infer done'
 
 

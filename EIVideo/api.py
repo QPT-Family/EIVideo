@@ -46,7 +46,7 @@ def json2frame(path):
     return frame_list
 
 
-def png2json(image_path, sliderframenum=0, first_scribble=False):
+def png2dic(image_path, sliderframenum=0, first_scribble=False):
     image_ = Image.open(image_path)  # 用PIL中的Image.open打开图像
     image = image_.convert('P')
     image_arr = np.array(image)  # 转化成numpy数组
@@ -79,10 +79,10 @@ def png2json(image_path, sliderframenum=0, first_scribble=False):
             dic['scribbles'].append(pframes)
         else:
             dic['scribbles'].append([])
-    json_str = json.dumps(dic)
-    with open('save.json', 'w') as f:
-        f.write(json_str)
-    return json_str
+    # json_str = json.dumps(dic)
+    # with open('save.json', 'w') as f:
+    #     f.write(json_str)
+    return dic
 
 
 def load_video(video_path, min_side=None):
@@ -105,13 +105,13 @@ def load_video(video_path, min_side=None):
     return frames, frame_list
 
 
-def get_scribbles():
+def get_scribbles(scribbles):
     # os.makedirs(TEMP_JSON_SAVE_PATH, exist_ok=True)
-    with open(TEMP_JSON_SAVE_PATH) as f:
-        print("load TEMP_JSON_SAVE_PATH success")
-        scribbles = json.load(f)
-        first_scribble = True
-        yield scribbles, first_scribble
+    # with open(TEMP_JSON_SAVE_PATH) as f:
+    print("load TEMP_JSON_SAVE_PATH success")
+    # scribbles = json.load(f)
+    first_scribble = True
+    yield scribbles, first_scribble
 
 
 def submit_masks(save_path, masks, images):
