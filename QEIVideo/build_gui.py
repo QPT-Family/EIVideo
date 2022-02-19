@@ -4,27 +4,18 @@
 # Please indicate the source for reprinting.
 import json
 import os
-
-import numpy as np
 import requests
-from PIL import Image
+import cv2
 
-from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-import cv2
 
 import EIVideo
 from EIVideo.api import json2frame, png2dic, load_video
 from EIVideo import TEMP_IMG_SAVE_PATH, TEMP_JSON_FINAL_PATH
 from QEIVideo.log import Logging
-
 from QEIVideo.gui.ui_main_window import Ui_MainWindow
-import sys
-
-
-PYTHON_PATH = sys.executable
 
 EIVideo_ROOT = os.path.dirname(EIVideo.__file__)
 MODEL_PATH = os.path.join(EIVideo_ROOT, "model/default_manet.pdparams")
@@ -35,6 +26,14 @@ if not os.path.exists(MODEL_PATH):
     Logging.info("正在下载模型文件")
     wget.download("https://videotag.bj.bcebos.com/PaddleVideo-release2.2/MANet_EIVideo.pdparams", out=MODEL_PATH)
     Logging.info("模型文件下载完成")
+
+
+def delete_file(file_path):
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        Logging.debug('delete temp file(s) done')
+    else:
+        Logging.debug('no such file:%s' % file_path)  # 则返回文件不存在
 
 
 class BuildGUI(QMainWindow, Ui_MainWindow):
@@ -59,7 +58,7 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         self.progressBar.setProperty("value", 0)
         image = self.paintBoard.get_content_as_q_image()
         image.save(TEMP_IMG_SAVE_PATH)
-        print(self.slider_frame_num)
+        Logging.debug("infer frame num: "+str(self.slider_frame_num))
         self.progressBar.setProperty("value", 25)
         dic_str = png2dic(TEMP_IMG_SAVE_PATH, self.slider_frame_num)
         self.progressBar.setProperty("value", 50)
@@ -73,10 +72,13 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         self.progressBar.setProperty("value", 75)
         self.all_frames = json2frame(path=TEMP_JSON_FINAL_PATH)
         Logging.info("拉取结果成功")
-        self.open_frame()
+        self.update_frame()
         self.paintBoard.clear()
         self.progressBar.setProperty("value", 100)
         self.label.setText("Infer succeed")
+        # 删除临时文件
+        delete_file('./final.json')
+        delete_file('./temp.png')
 
     def btn_func(self, btn):
         if btn == self.playbtn:
@@ -88,7 +90,7 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
             self.timer_camera = QTimer()  # 定义定时器
             self.timer_camera.start(int(1000 / self.cap.get(cv2.CAP_PROP_FPS)))
             self.slider_frame_num = self.progress_slider.value()
-            self.timer_camera.timeout.connect(self.open_frame)
+            self.timer_camera.timeout.connect(self.update_frame)
 
         elif btn == self.pushButton_2:
             self.label.setText("Stop video")
@@ -103,10 +105,10 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
                 self.cap = cv2.VideoCapture(self.select_video_path)
                 # 存所有frame
                 self.save_temp_frame()
-                print("save temp frame done")
+                Logging.debug("save temp frame done")
                 self.progress_slider.setRange(0, int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT)))
                 self.slider_frame_num = 0
-                self.open_frame()
+                self.update_frame()
             else:
                 QMessageBox.information(self,
                                         "请选择正确的视频格式",
@@ -147,7 +149,7 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         self.label.setText("Change slider position")
         self.slider_frame_num = self.progress_slider.value()
         self.slot_stop()
-        self.open_frame()
+        self.update_frame()
         self.progress_slider.setValue(self.slider_frame_num)
         self.time_label.setText('{}/{}'.format(self.slider_frame_num, self.cap.get(7)))
 
@@ -161,7 +163,7 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
             QMessageBox.warning(self, "Warming", "Push the left upper corner button to Quit.",
                                 QMessageBox.Yes)
 
-    def open_frame(self):
+    def update_frame(self):
         self.progress_slider.setValue(self.slider_frame_num)
         self.slider_frame_num = self.progress_slider.value()
         self.frame = self.all_frames[self.slider_frame_num]

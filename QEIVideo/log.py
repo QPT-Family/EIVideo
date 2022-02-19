@@ -5,11 +5,11 @@ __all__ = ["Logging", "change_none_color", "clean_stout", "TProgressBar"]
 
 # 创建一个logger
 logger = logging.getLogger("QEIVideo_logger")
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 # 输出至控制台
 st_handler = logging.StreamHandler()
-st_handler.setLevel(logging.DEBUG)
+st_handler.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 st_handler.setFormatter(formatter)
 st_handler.terminator = ""

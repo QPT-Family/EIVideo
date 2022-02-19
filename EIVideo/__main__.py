@@ -13,20 +13,18 @@
 # limitations under the License.
 import argparse
 import random
-
-import numpy as np
-import paddle
-
-from EIVideo.log import Logging
-from EIVideo.paddlevideo.modeling.framework import Manet
-from EIVideo.paddlevideo.tasks import (test_model)
-from EIVideo.paddlevideo.utils import get_config, get_dist_info
-from EIVideo import EI_VIDEO_ROOT, join_root_path
-
-from flask import Flask, render_template, request, flash, redirect, url_for, make_response
-from flask_bootstrap import Bootstrap
 import os
 import json
+import paddle
+import numpy as np
+
+from flask import Flask, request
+from flask_bootstrap import Bootstrap
+
+from EIVideo import join_root_path
+from EIVideo.log import Logging
+from EIVideo.paddlevideo.modeling.framework import Manet
+from EIVideo.paddlevideo.utils import get_config, get_dist_info
 
 DEF_CONFIG_FILE_PATH = join_root_path("configs/manet.yaml")
 DEF_PARAMS_FILE_PATH = join_root_path("model/default_manet.pdparams")

@@ -31,16 +31,6 @@ from ...registry import SEGMENT
 from .base import BaseSegment
 
 
-# if cfg.MODEL.framework == "Manet":
-#     cfg_helper = {"knns": 1,
-#                   "is_save_image": True}
-#     cfg.update(cfg_helper)
-#     build_model(cfg['MODEL']).test_step(**cfg,
-#                                         weights=weights,
-#                                         parallel=False)
-#     return
-
-
 @SEGMENT.register()
 class Manet(BaseSegment):
     def __init__(self, backbone=None, head=None, **cfg):
@@ -90,6 +80,7 @@ class Manet(BaseSegment):
         write_dict(state_dicts, 'model_for_infer.txt', **cfg)
         model.set_state_dict(state_dicts)
         inter_file = open(
+            # output masks
             os.path.join(
                 cfg.get("output_dir", f"./output/{cfg['model_name']}"),
                 'inter_file.txt'), 'w')
