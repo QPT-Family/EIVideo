@@ -12,7 +12,7 @@ import numpy as np
 from PIL import Image
 
 from EIVideo.paddlevideo.utils.manet_utils import overlay_davis
-from EIVideo import TEMP_JSON_SAVE_PATH, TEMP_JSON_FINAL_PATH
+from EIVideo import TEMP_JSON_FINAL_PATH
 
 
 def get_images(sequence='bike-packing'):

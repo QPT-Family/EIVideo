@@ -150,4 +150,4 @@ def infer():
 
 if __name__ == '__main__':
     paddle.set_device("gpu")
-    app.run(debug=True)
+    app.run(debug=False)

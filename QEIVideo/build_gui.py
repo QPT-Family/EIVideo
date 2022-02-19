@@ -15,10 +15,24 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import cv2
 
+import EIVideo
 from EIVideo.api import json2frame, png2dic, load_video
-from EIVideo import TEMP_JSON_SAVE_PATH, TEMP_IMG_SAVE_PATH, TEMP_JSON_FINAL_PATH
+from EIVideo import TEMP_IMG_SAVE_PATH, TEMP_JSON_FINAL_PATH
 
 from QEIVideo.gui.ui_main_window import Ui_MainWindow
+import sys
+
+
+PYTHON_PATH = sys.executable
+
+EIVideo_ROOT = os.path.dirname(EIVideo.__file__)
+MODEL_PATH = os.path.join(EIVideo_ROOT, "model/default_manet.pdparams")
+if not os.path.exists(MODEL_PATH):
+    import wget
+    import ssl
+    ssl._create_default_https_context = ssl._create_unverified_context
+    print("正在下载模型文件")
+    wget.download("https://videotag.bj.bcebos.com/PaddleVideo-release2.2/MANet_EIVideo.pdparams", out=MODEL_PATH)
 
 
 class BuildGUI(QMainWindow, Ui_MainWindow):
@@ -29,6 +43,14 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         os.makedirs(self.save_path, exist_ok=True)
 
         self.setupUi(self)
+
+        QMessageBox.information(self,
+                                "使用必读",
+                                "当前程式为示例程式，仅供模型效果演示，且未对操作系统、硬件进行强制限制，"
+                                "可能会因环境而造成意料之外/无法正确使用的情况。\n"
+                                "目前我们正在设计新版本EIVideo来提供更好的使用体验，也欢迎通过GitHub issue的形式联系并加入我们~\n"
+                                "https://github.com/QPT-Family/EIVideo",
+                                QMessageBox.Yes)
 
     def merge(dict1, dict2):
         res = {**dict1, **dict2}
@@ -53,10 +75,11 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         print('Infer ok')
         self.progressBar.setProperty("value", 75)
 
-        self.all_frames = json2frame(TEMP_JSON_FINAL_PATH)
+        self.all_frames = json2frame(path=TEMP_JSON_FINAL_PATH)
 
         print("Success get submit_masks")
         self.open_frame()
+        self.paintBoard.clear()
         self.progressBar.setProperty("value", 100)
         self.label.setText("Infer succeed")
 
@@ -68,7 +91,7 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
                 self.progress_slider.setValue(self.slider_frame_num)
                 self.time_label.setText('{}/{}'.format(self.slider_frame_num, self.cap.get(7)))
             self.timer_camera = QTimer()  # 定义定时器
-            self.timer_camera.start(1000 / self.cap.get(cv2.CAP_PROP_FPS))
+            self.timer_camera.start(int(1000 / self.cap.get(cv2.CAP_PROP_FPS)))
             self.slider_frame_num = self.progress_slider.value()
             self.timer_camera.timeout.connect(self.open_frame)
 
@@ -81,17 +104,20 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
             self.select_video_path, _ = QFileDialog.getOpenFileName(self, "Open", "", "*.mp4;;All Files(*)")
             print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
             print("Select video file path:\t" + self.select_video_path)
-            # ToDo To AP-kai:下断点来看一下，如果不选择的时候返回值是什么样的，然后再做判断，目前这个if没有生效
-            if self.select_video_path != "":
+            video_type_list = ["mp4", "MP4", "mov", "MOV", "avi", "AVI"]
+            if self.select_video_path.split('/')[-1].split('.')[-1] in video_type_list:
                 self.cap = cv2.VideoCapture(self.select_video_path)
                 # 存所有frame
                 self.save_temp_frame()
                 print("save temp frame done")
-                self.progress_slider.setRange(0, self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
+                self.progress_slider.setRange(0, int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT)))
                 self.slider_frame_num = 0
                 self.open_frame()
-
-            # ToDo To AP-kai: 未来这个地方增加提示框，告诉他没有选择文件
+            else:
+                QMessageBox.information(self,
+                                        "请选择正确的视频格式",
+                                        "请选择正确的视频格式,目前默认支持mp4/MP4/mov/MOV/avi/AVI。",
+                                        QMessageBox.Yes)
 
     def on_cbtn_eraser_clicked(self):
         self.label.setText("Eraser On")
