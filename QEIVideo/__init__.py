@@ -6,5 +6,6 @@
 
 import os
 from QEIVideo.version import __version__
+from QEIVideo.log import Logging
 
 QEI_VIDEO_ROOT = os.path.abspath(os.path.dirname(__file__))

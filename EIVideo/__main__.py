@@ -17,6 +17,7 @@ import random
 import numpy as np
 import paddle
 
+from EIVideo.log import Logging
 from EIVideo.paddlevideo.modeling.framework import Manet
 from EIVideo.paddlevideo.tasks import (test_model)
 from EIVideo.paddlevideo.utils import get_config, get_dist_info
@@ -120,12 +121,10 @@ def start_infer(video_path='EIVideo/example/example.mp4', save_path='./output', 
     if parallel:
         paddle.distributed.init_parallel_env()
 
-    print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
-    print("-+-+-+-+-+服务启动成功-+-+-+-+-")
-    print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
     cfg_helper = {"knns": 1, "is_save_image": True}
     cfg.update(cfg_helper)
 
+    Logging.info("开始预测")
     Manet().test_step(**cfg, save_path=save_path, video_path=video_path, weights=args.weights, parallel=parallel,
                       json_scribbles=json_scribbles
                       )
@@ -150,4 +149,7 @@ def infer():
 
 if __name__ == '__main__':
     paddle.set_device("gpu")
+    Logging.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
+    Logging.info("-+-+-+-+-+服务启动成功-+-+-+-+-")
+    Logging.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
     app.run(debug=False)

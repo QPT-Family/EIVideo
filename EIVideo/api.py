@@ -5,6 +5,7 @@
 
 
 import json
+import logging
 import os
 from collections import OrderedDict
 import cv2
@@ -13,6 +14,7 @@ from PIL import Image
 
 from EIVideo.paddlevideo.utils.manet_utils import overlay_davis
 from EIVideo import TEMP_JSON_FINAL_PATH
+from EIVideo.log import Logging
 
 
 def get_images(sequence='bike-packing'):
@@ -27,7 +29,6 @@ def get_images(sequence='bike-packing'):
 
 
 def json2frame(path):
-    print("now turn masks.json to frames")
     with open(path, 'r', encoding='utf-8') as f:
         res = f.read()
         a = json.loads(res)
@@ -43,6 +44,7 @@ def json2frame(path):
             # im = im.transpose((2, 0, 1))
             # im = cv2.merge(im)
             frame_list.append(im)
+    Logging.debug("turn final.json to frames done")
     return frame_list
 
 
@@ -82,6 +84,7 @@ def png2dic(image_path, sliderframenum=0, first_scribble=False):
     # json_str = json.dumps(dic)
     # with open('save.json', 'w') as f:
     #     f.write(json_str)
+    Logging.debug("png2dic done")
     return dic
 
 
@@ -106,10 +109,6 @@ def load_video(video_path, min_side=None):
 
 
 def get_scribbles(scribbles):
-    # os.makedirs(TEMP_JSON_SAVE_PATH, exist_ok=True)
-    # with open(TEMP_JSON_SAVE_PATH) as f:
-    print("load TEMP_JSON_SAVE_PATH success")
-    # scribbles = json.load(f)
     first_scribble = True
     yield scribbles, first_scribble
 
@@ -128,3 +127,4 @@ def submit_masks(save_path, masks, images):
     # result = {'masks': masks.tolist()}
     with open(TEMP_JSON_FINAL_PATH, 'w') as f:
         json.dump(result, f)
+    logging.debug("save final.json done")

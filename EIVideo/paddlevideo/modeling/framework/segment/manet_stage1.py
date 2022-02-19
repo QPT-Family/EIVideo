@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from EIVideo.paddlevideo.loader.builder import build_pipeline
-
 from EIVideo.paddlevideo.loader.pipelines import ToTensor_manet
+from EIVideo.log import Logging
 
 import os
 import timeit
@@ -68,7 +68,7 @@ class Manet(BaseSegment):
         sequence = cfg["video_path"].split('/')[-1].split('.')[0]
         obj_nums = 1
         images, _ = load_video(cfg["video_path"], 480)
-        print("stage1 load_video success")
+        Logging.debug("stage1 load_video success")
         # [195, 389, 238, 47, 244, 374, 175, 399]
         # .shape: (502, 480, 600, 3)
         report_save_dir = cfg.get("output_dir",
@@ -409,7 +409,7 @@ class Manet(BaseSegment):
                 submit_masks(cfg["save_path"], final_masks.numpy(), images)
 
                 t_end = timeit.default_timer()
-                print('Total time for single interaction: ' +
+                Logging.info('Total time for single interaction: ' +
                       str(t_end - t_total))
         inter_file.close()
         return None
