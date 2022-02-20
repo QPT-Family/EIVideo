@@ -1,13 +1,16 @@
 # EIVideo - 交互式智能视频标注工具
 
-[![Downloads](https://static.pepy.tech/personalized-badge/eivideo?period=total&units=international_system&left_color=grey&right_color=orange&left_text=EIVideo%20User)](https://pepy.tech/project/eivideo)
-[![Downloads](https://static.pepy.tech/personalized-badge/qeivideo?period=total&units=international_system&left_color=grey&right_color=orange&left_text=QEIVideo%20User)](https://pepy.tech/project/qeivideo)
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/QPT-Family/EIVideo?include_prereleases)
 ![GitHub forks](https://img.shields.io/github/forks/QPT-Family/EIVideo)
 ![GitHub Repo stars](https://img.shields.io/github/stars/QPT-Family/EIVideo)
 ![GitHub](https://img.shields.io/github/license/QPT-Family/EIVideo)
-![](https://img.shields.io/badge/%E6%B7%B1%E5%BA%A6%E9%80%82%E9%85%8D->Win7-9cf)
-[![QQGroup](https://img.shields.io/badge/QQ群-441226485-9cf?logo=tencent-qq&logoColor=000&logoWidth=15)](https://jq.qq.com/?_wv=1027&k=Z6G9YmzQ)
+![](https://img.shields.io/badge/OS-Linux|MAC|Win7+-9cf)
+[![QQGroup](https://img.shields.io/badge/QQ群-441226485-9cf?logo=tencent-qq&logoColor=000&logoWidth=15)](https://jq.qq.com/?_wv=1027&k=Z6G9YmzQ)  
+
+[![Downloads](https://static.pepy.tech/personalized-badge/eivideo?period=total&units=international_system&left_color=grey&right_color=orange&left_text=EIVideo%20User)](https://pepy.tech/project/eivideo)
+[![Downloads](https://static.pepy.tech/personalized-badge/qeivideo?period=total&units=international_system&left_color=grey&right_color=orange&left_text=QEIVideo%20User)](https://pepy.tech/project/qeivideo)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/QPT-Family/EIVideo?include_prereleases)  
+
+
 
 ---
 
@@ -72,12 +75,12 @@ EIVideo，基于百度飞桨MA-Net交互式视频分割模型打造的交互式*
 * 国际方式：
   ```shell
   python -m pip install eivideo
-  python qeivideo
+  python -m qeivideo
   ```
 * 国内推荐：
   ```shell
   python -m pip install eivideo -i https://mirrors.bfsu.edu.cn/pypi/web/simple
-  python qeivideo
+  python -m qeivideo
   ```
 > 上述命令仅适用于常规情况，若您安装了多个Python或修改了相关开发工具与配置，请自行修改相关命令使其符合您的开发环境。
 
@@ -99,7 +102,8 @@ EIVideo，基于百度飞桨MA-Net交互式视频分割模型打造的交互式*
   # 进入工作目录
   cd 此处填写EIVideo所在的目录的绝对路径，且该目录下拥有EIVideo与QEIVideo两文件夹。
   # 运行
-  python QEIVideo/start.py
+  python EIVideo/__main__.py
+  python QEIVideo/__main__.py
   
   # 如运行时无法找到对应包，可选择下述方式添加环境变量来调整索引次序后执行python
   # Windows

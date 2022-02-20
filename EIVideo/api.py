@@ -1,55 +1,26 @@
 # Author: AP-Kai
-# Datetime: 2022/1/10
+# Datetime: 2022/2/19
 # Copyright belongs to the author.
 # Please indicate the source for reprinting.
 
 
-import json
 import os
-from collections import OrderedDict
 import cv2
+import json
 import numpy as np
 from PIL import Image
 
+from collections import OrderedDict
+
+from EIVideo import TEMP_JSON_FINAL_PATH
+from EIVideo.log import Logging
 from EIVideo.paddlevideo.utils.manet_utils import overlay_davis
-from EIVideo import TEMP_JSON_SAVE_PATH, TEMP_JSON_FINAL_PATH
 
 
-def get_images(sequence='bike-packing'):
-    img_path = os.path.join('data', sequence.strip(), 'frame')
-    img_files = os.listdir(img_path)
-    img_files.sort()
-    files = []
-    for img in img_files:
-        img_file = np.array(Image.open(os.path.join(img_path, img)))
-        files.append(img_file)
-    return np.array(files)
-
-
-def json2frame(path):
-    print("now turn masks.json to frames")
-    with open(path, 'r', encoding='utf-8') as f:
-        res = f.read()
-        a = json.loads(res)
-        b = a.get('overlays')
-        b_array = np.array(b)
-        frame_list = []
-
-        for i in range(0, len(b_array)):
-            im = Image.fromarray(np.uint8(b_array[i]))
-            im = cv2.cvtColor(np.asarray(im), cv2.COLOR_RGB2BGR)
-            im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
-            # im = np.array(b_array[i]).astype("uint8")
-            # im = im.transpose((2, 0, 1))
-            # im = cv2.merge(im)
-            frame_list.append(im)
-    return frame_list
-
-
-def png2json(image_path, sliderframenum=0, first_scribble=False):
-    image_ = Image.open(image_path)  # 用PIL中的Image.open打开图像
+def png2dic(image_path, slider_frame_num=0, first_scribble=False):
+    image_ = Image.open(image_path)
     image = image_.convert('P')
-    image_arr = np.array(image)  # 转化成numpy数组
+    image_arr = np.array(image)
     image_arr = image_arr.astype("float32")
     pframes = []
     # i -> object id
@@ -65,8 +36,8 @@ def png2json(image_path, sliderframenum=0, first_scribble=False):
         pframe['path'] = r1.tolist()
         # Add object id, start_time, stop_time
         pframe['object_id'] = i
-        pframe['start_time'] = sliderframenum
-        pframe['stop_time'] = sliderframenum
+        pframe['start_time'] = slider_frame_num
+        pframe['stop_time'] = slider_frame_num
         # Add pframe to pframes
         pframes.append(pframe)
 
@@ -74,15 +45,16 @@ def png2json(image_path, sliderframenum=0, first_scribble=False):
     dic['first_scribble'] = first_scribble
     dic['scribbles'] = []
     for i in range(0, int(150)):
-        if i == sliderframenum:
+        if i == slider_frame_num:
             # Add value to frame[]
             dic['scribbles'].append(pframes)
         else:
             dic['scribbles'].append([])
-    json_str = json.dumps(dic)
-    with open('save.json', 'w') as f:
-        f.write(json_str)
-    return json_str
+    # json_str = json.dumps(dic)
+    # with open('save.json', 'w') as f:
+    #     f.write(json_str)
+    Logging.debug("png2dic done")
+    return dic
 
 
 def load_video(video_path, min_side=None):
@@ -105,13 +77,9 @@ def load_video(video_path, min_side=None):
     return frames, frame_list
 
 
-def get_scribbles():
-    # os.makedirs(TEMP_JSON_SAVE_PATH, exist_ok=True)
-    with open(TEMP_JSON_SAVE_PATH) as f:
-        print("load TEMP_JSON_SAVE_PATH success")
-        scribbles = json.load(f)
-        first_scribble = True
-        yield scribbles, first_scribble
+def get_scribbles(scribbles):
+    first_scribble = True
+    yield scribbles, first_scribble
 
 
 def submit_masks(save_path, masks, images):
@@ -124,7 +92,24 @@ def submit_masks(save_path, masks, images):
         while len(img_name) < 5:
             img_name = '0' + img_name
         overlay.save(os.path.join(save_path, img_name + '.png'))
-    result = {'overlays': overlays}
-    # result = {'masks': masks.tolist()}
+    result = {"overlays": overlays}
     with open(TEMP_JSON_FINAL_PATH, 'w') as f:
         json.dump(result, f)
+    Logging.debug("save final.json done")
+
+
+def json2frame(path):
+    with open(path, 'r', encoding='utf-8') as f:
+        res = f.read()
+        a = json.loads(res)
+        b = a.get('overlays')
+        b_array = np.array(b)
+        frame_list = []
+
+        for i in range(0, len(b_array)):
+            im = Image.fromarray(np.uint8(b_array[i]))
+            im = cv2.cvtColor(np.asarray(im), cv2.COLOR_RGB2BGR)
+            im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
+            frame_list.append(im)
+    Logging.debug("turn final.json to frames done")
+    return frame_list

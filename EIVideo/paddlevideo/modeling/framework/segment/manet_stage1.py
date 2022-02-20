@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from EIVideo.paddlevideo.loader.builder import build_pipeline
-
 from EIVideo.paddlevideo.loader.pipelines import ToTensor_manet
+from EIVideo.log import Logging
 
 import os
 import timeit
@@ -31,16 +31,6 @@ from ...registry import SEGMENT
 from .base import BaseSegment
 
 
-# if cfg.MODEL.framework == "Manet":
-#     cfg_helper = {"knns": 1,
-#                   "is_save_image": True}
-#     cfg.update(cfg_helper)
-#     build_model(cfg['MODEL']).test_step(**cfg,
-#                                         weights=weights,
-#                                         parallel=False)
-#     return
-
-
 @SEGMENT.register()
 class Manet(BaseSegment):
     def __init__(self, backbone=None, head=None, **cfg):
@@ -56,7 +46,7 @@ class Manet(BaseSegment):
         """Define how the model is going to test, from input to output."""
         pass
 
-    def test_step(self, weights, parallel=True, is_save_image=True, **cfg):
+    def test_step(self, weights, parallel=True, is_save_image=True, json_scribbles=None, **cfg):
         # 1. Construct model.
         cfg['MODEL'].head.pretrained = ''
         cfg['MODEL'].head.test_mode = True
@@ -68,7 +58,7 @@ class Manet(BaseSegment):
         sequence = cfg["video_path"].split('/')[-1].split('.')[0]
         obj_nums = 1
         images, _ = load_video(cfg["video_path"], 480)
-        print("stage1 load_video success")
+        Logging.debug("stage1 load_video success")
         # [195, 389, 238, 47, 244, 374, 175, 399]
         # .shape: (502, 480, 600, 3)
         report_save_dir = cfg.get("output_dir",
@@ -90,6 +80,7 @@ class Manet(BaseSegment):
         write_dict(state_dicts, 'model_for_infer.txt', **cfg)
         model.set_state_dict(state_dicts)
         inter_file = open(
+            # output masks
             os.path.join(
                 cfg.get("output_dir", f"./output/{cfg['model_name']}"),
                 'inter_file.txt'), 'w')
@@ -98,7 +89,7 @@ class Manet(BaseSegment):
         with paddle.no_grad():
 
             # Get the current iteration scribbles
-            for scribbles, first_scribble in get_scribbles():
+            for scribbles, first_scribble in get_scribbles(json_scribbles):
                 t_total = timeit.default_timer()
                 f, h, w = images.shape[:3]
                 if 'prev_label_storage' not in locals().keys():
@@ -409,7 +400,7 @@ class Manet(BaseSegment):
                 submit_masks(cfg["save_path"], final_masks.numpy(), images)
 
                 t_end = timeit.default_timer()
-                print('Total time for single interaction: ' +
+                Logging.info('Total time for single interaction: ' +
                       str(t_end - t_total))
         inter_file.close()
         return None

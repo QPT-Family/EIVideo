@@ -3,11 +3,9 @@
 # Copyright belongs to the author.
 # Please indicate the source for reprinting.
 
-import os
-
-QEI_VIDEO_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 import os
 from QEIVideo.version import __version__
+from QEIVideo.log import Logging
 
 QEI_VIDEO_ROOT = os.path.abspath(os.path.dirname(__file__))

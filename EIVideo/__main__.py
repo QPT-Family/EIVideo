@@ -13,19 +13,18 @@
 # limitations under the License.
 import argparse
 import random
-
-import numpy as np
-import paddle
-
-from EIVideo.paddlevideo.modeling.framework import Manet
-from EIVideo.paddlevideo.tasks import (test_model)
-from EIVideo.paddlevideo.utils import get_config, get_dist_info
-from EIVideo import EI_VIDEO_ROOT, join_root_path
-
-from flask import Flask, render_template, request, flash, redirect, url_for, make_response
-from flask_bootstrap import Bootstrap
 import os
 import json
+import paddle
+import numpy as np
+
+from flask import Flask, request
+from flask_bootstrap import Bootstrap
+
+from EIVideo import join_root_path
+from EIVideo.log import Logging
+from EIVideo.paddlevideo.modeling.framework import Manet
+from EIVideo.paddlevideo.utils import get_config, get_dist_info
 
 DEF_CONFIG_FILE_PATH = join_root_path("configs/manet.yaml")
 DEF_PARAMS_FILE_PATH = join_root_path("model/default_manet.pdparams")
@@ -100,7 +99,7 @@ def parse_args():
     return args
 
 
-def start_infer(video_path='EIVideo/example/example.mp4', save_path='./output'):
+def start_infer(video_path='EIVideo/example/example.mp4', save_path='./output', json_scribbles=None):
     paddle.set_device("gpu")
     args = parse_args()
     cfg = get_config(args.config, overrides=args.override)
@@ -120,13 +119,12 @@ def start_infer(video_path='EIVideo/example/example.mp4', save_path='./output'):
     if parallel:
         paddle.distributed.init_parallel_env()
 
-    print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
-    print("-+-+-+-+-+服务启动成功-+-+-+-+-")
-    print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
     cfg_helper = {"knns": 1, "is_save_image": True}
     cfg.update(cfg_helper)
 
+    Logging.info("开始预测")
     Manet().test_step(**cfg, save_path=save_path, video_path=video_path, weights=args.weights, parallel=parallel,
+                      json_scribbles=json_scribbles
                       )
 
 
@@ -142,10 +140,14 @@ def infer():
         json_data = json.loads(data.decode("utf-8"))
         video_path = json_data.get("video_path")
         save_path = json_data.get("save_path")
-        start_infer(video_path=video_path, save_path=save_path)
+        json_scribbles = json_data.get("params")
+        start_infer(video_path=video_path, save_path=save_path, json_scribbles=json_scribbles)
         return 'server infer done'
 
 
 if __name__ == '__main__':
     paddle.set_device("gpu")
-    app.run(debug=True)
+    Logging.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
+    Logging.info("-+-+-+-+-+服务启动成功-+-+-+-+-")
+    Logging.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
+    app.run(debug=False)
