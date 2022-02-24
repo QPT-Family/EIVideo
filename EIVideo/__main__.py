@@ -13,17 +13,28 @@
 # limitations under the License.
 import argparse
 import random
-
-import numpy as np
+import os
+import json
 import paddle
+import numpy as np
 
+from flask import Flask, request
+from flask_bootstrap import Bootstrap
+
+from EIVideo import join_root_path
+from EIVideo.log import Logging
 from EIVideo.paddlevideo.modeling.framework import Manet
 from EIVideo.paddlevideo.utils import get_config, get_dist_info
-from EIVideo import EI_VIDEO_ROOT, join_root_path
-from socket import *
 
 DEF_CONFIG_FILE_PATH = join_root_path("configs/manet.yaml")
-DEF_PARAMS_FILE_PATH = join_root_path("model/default_manet1.pdparams")
+DEF_PARAMS_FILE_PATH = join_root_path("model/default_manet.pdparams")
+
+app = Flask(__name__)
+bootstrap = Bootstrap(app)
+app.config['SECRET_KEY'] = os.urandom(24)
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+uploadDir = os.path.join(basedir, 'static/uploads')
 
 
 def parse_args():
@@ -32,11 +43,6 @@ def parse_args():
                         '--config',
                         type=str,
                         default=DEF_CONFIG_FILE_PATH,
-                        help='config file path')
-    parser.add_argument('-v',
-                        '--video',
-                        type=str,
-                        default=None,
                         help='config file path')
     parser.add_argument('-o',
                         '--override',
@@ -93,9 +99,12 @@ def parse_args():
     return args
 
 
-def cli(video_path=None, save_path='./output'):
+def start_infer(video_path='EIVideo/example/example.mp4', save_path='./output', json_scribbles=None):
+    paddle.set_device("gpu")
     args = parse_args()
     cfg = get_config(args.config, overrides=args.override)
+
+    # set seed if specified
     seed = args.seed
     if seed is not None:
         assert isinstance(
@@ -110,23 +119,35 @@ def cli(video_path=None, save_path='./output'):
     if parallel:
         paddle.distributed.init_parallel_env()
 
-    print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
-    print("-+-+-+-+-+服务启动成功-+-+-+-+-")
-    print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
-    tcp_server = socket(AF_INET, SOCK_STREAM)
-    address = ('localhost', 2333)
-    tcp_server.bind(address)
-    tcp_server.listen(128)
-    client_socket, clientAddr = tcp_server.accept()
-    if video_path is None:
-        cfg.update({"video_path": video_path})
     cfg_helper = {"knns": 1, "is_save_image": True}
     cfg.update(cfg_helper)
+
+    Logging.info("开始预测")
     Manet().test_step(**cfg, save_path=save_path, video_path=video_path, weights=args.weights, parallel=parallel,
-                      client_socket=client_socket)
-    print('Inference completed')
-    client_socket.close()
+                      json_scribbles=json_scribbles
+                      )
+
+
+@app.route('/', methods=['GET'])
+def hello():
+    return "hello world"
+
+
+@app.route('/infer', methods=['GET', 'POST'])
+def infer():
+    if request.method == 'POST':
+        data = request.get_data()
+        json_data = json.loads(data.decode("utf-8"))
+        video_path = json_data.get("video_path")
+        save_path = json_data.get("save_path")
+        json_scribbles = json_data.get("params")
+        start_infer(video_path=video_path, save_path=save_path, json_scribbles=json_scribbles)
+        return 'server infer done'
 
 
 if __name__ == '__main__':
-    cli(video_path='example/example.mp4', save_path='./output')
+    paddle.set_device("gpu")
+    Logging.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
+    Logging.info("-+-+-+-+-+服务启动成功-+-+-+-+-")
+    Logging.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
+    app.run(debug=False)

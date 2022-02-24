@@ -85,22 +85,22 @@ def setup_logger(output=None, name="paddlevideo", level="INFO"):
         logger.addHandler(ch)
 
     # file logging: all workers
-    if output is not None:
-        if output.endswith(".txt") or output.endswith(".log"):
-            filename = output
-        else:
-            filename = os.path.join(output, ".log.txt")
-        if local_rank > 0:
-            filename = filename + ".rank{}".format(local_rank)
-
-        # PathManager.mkdirs(os.path.dirname(filename))
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
-
-        # fh = logging.StreamHandler(_cached_log_stream(filename)
-        fh = logging.FileHandler(filename, mode='a')
-        fh.setLevel(logging.DEBUG)
-        fh.setFormatter(plain_formatter)
-        logger.addHandler(fh)
+    # if output is not None:
+    #     if output.endswith(".txt") or output.endswith(".log"):
+    #         filename = output
+    #     else:
+    #         filename = os.path.join(output, ".log.txt")
+    #     if local_rank > 0:
+    #         filename = filename + ".rank{}".format(local_rank)
+    #
+    #     # PathManager.mkdirs(os.path.dirname(filename))
+    #     os.makedirs(os.path.dirname(filename), exist_ok=True)
+    #
+    #     # fh = logging.StreamHandler(_cached_log_stream(filename)
+    #     fh = logging.FileHandler(filename, mode='a')
+    #     fh.setLevel(logging.DEBUG)
+    #     fh.setFormatter(plain_formatter)
+    #     logger.addHandler(fh)
     logger_initialized.append(name)
     return logger
 

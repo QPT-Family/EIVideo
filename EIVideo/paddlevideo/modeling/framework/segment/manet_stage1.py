@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from EIVideo.paddlevideo.loader.builder import build_pipeline
-
 from EIVideo.paddlevideo.loader.pipelines import ToTensor_manet
+from EIVideo.log import Logging
 
 import os
 import timeit
@@ -31,16 +31,6 @@ from ...registry import SEGMENT
 from .base import BaseSegment
 
 
-# if cfg.MODEL.framework == "Manet":
-#     cfg_helper = {"knns": 1,
-#                   "is_save_image": True}
-#     cfg.update(cfg_helper)
-#     build_model(cfg['MODEL']).test_step(**cfg,
-#                                         weights=weights,
-#                                         parallel=False)
-#     return
-
-
 @SEGMENT.register()
 class Manet(BaseSegment):
     def __init__(self, backbone=None, head=None, **cfg):
@@ -56,7 +46,7 @@ class Manet(BaseSegment):
         """Define how the model is going to test, from input to output."""
         pass
 
-    def test_step(self, weights, client_socket, parallel=True, is_save_image=True, **cfg):
+    def test_step(self, weights, parallel=True, is_save_image=True, json_scribbles=None, **cfg):
         # 1. Construct model.
         cfg['MODEL'].head.pretrained = ''
         cfg['MODEL'].head.test_mode = True
@@ -66,13 +56,17 @@ class Manet(BaseSegment):
 
         # 2. Construct data.
         sequence = cfg["video_path"].split('/')[-1].split('.')[0]
-        sequence = ""
         obj_nums = 1
         images, _ = load_video(cfg["video_path"], 480)
-        print("stage1 load_video success")
+        Logging.debug("stage1 load_video success")
         # [195, 389, 238, 47, 244, 374, 175, 399]
         # .shape: (502, 480, 600, 3)
-
+        report_save_dir = cfg.get("output_dir",
+                                  f"./output/{cfg['model_name']}")
+        if not os.path.exists(report_save_dir):
+            os.makedirs(report_save_dir)
+            # Configuration used in the challenges
+        max_nb_interactions = 8  # Maximum number of interactions
         # Interactive parameters
         model.eval()
 
@@ -85,20 +79,24 @@ class Manet(BaseSegment):
                     print(f'pretrained -----{k} -------is not in model')
         write_dict(state_dicts, 'model_for_infer.txt', **cfg)
         model.set_state_dict(state_dicts)
+        inter_file = open(
+            # output masks
+            os.path.join(
+                cfg.get("output_dir", f"./output/{cfg['model_name']}"),
+                'inter_file.txt'), 'w')
         seen_seq = False
 
         with paddle.no_grad():
-            while True:
-                print('Getting the current iteration scribbles ......')
-                scribbles, first_scribble = get_scribbles(client_socket)
+
+            # Get the current iteration scribbles
+            for scribbles, first_scribble in get_scribbles(json_scribbles):
                 t_total = timeit.default_timer()
                 f, h, w = images.shape[:3]
                 if 'prev_label_storage' not in locals().keys():
                     prev_label_storage = paddle.zeros([f, h, w])
                 if len(annotated_frames(scribbles)) == 0:
                     final_masks = prev_label_storage
-                    # ToDo To AP-kai: save_path传过来了
-                    submit_masks(images, final_masks.numpy(), client_socket)
+                    submit_masks(cfg["save_path"], final_masks.numpy(), images)
                     continue
 
                 # if no scribbles return, keep masks in previous round
@@ -114,6 +112,9 @@ class Manet(BaseSegment):
 
                 else:
                     n_interaction += 1
+                inter_file.write(sequence + ' ' + 'interaction' +
+                                 str(n_interaction) + ' ' + 'frame' +
+                                 str(start_annotated_frame) + '\n')
 
                 if first_scribble:  # if in the first round, extract pixel embbedings.
                     if not seen_seq:
@@ -197,7 +198,7 @@ class Manet(BaseSegment):
                     )
                     print(paddle.unique(scribble_label))
                     final_masks = prev_label_storage
-                    submit_masks(images, final_masks.numpy(), client_socket)
+                    submit_masks(cfg["save_path"], final_masks.numpy(), images)
                     continue
 
                 ###inteaction segmentation head
@@ -396,8 +397,10 @@ class Manet(BaseSegment):
                 pred_masks_reverse.reverse()
                 pred_masks_reverse.extend(pred_masks)
                 final_masks = paddle.concat(pred_masks_reverse, 0)
-                submit_masks(images, final_masks.numpy(), client_socket)
+                submit_masks(cfg["save_path"], final_masks.numpy(), images)
 
                 t_end = timeit.default_timer()
-                print('Total time for single interaction: ' +
+                Logging.info('Total time for single interaction: ' +
                       str(t_end - t_total))
+        inter_file.close()
+        return None
