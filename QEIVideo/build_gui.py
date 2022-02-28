@@ -40,7 +40,7 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(BuildGUI, self).__init__()
         self.select_video_path = None
-        self.save_path = "./result"
+        self.save_path = "./output"
         os.makedirs(self.save_path, exist_ok=True)
 
         self.setupUi(self)
@@ -66,18 +66,16 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
                   "save_path": self.save_path,
                   "params": dic_str}
         paths_json = json.dumps(paths2)
-        r = requests.post("http://127.0.0.1:5000/infer", data=paths_json)
-
+        self.r = requests.post("http://127.0.0.1:6666/infer", data=paths_json)
         Logging.info("推理结束,正在拉取结果.")
         self.progressBar.setProperty("value", 75)
-        self.all_frames = json2frame(path=TEMP_JSON_FINAL_PATH)
+        self.all_frames = json2frame(json_data=self.r.json())
         Logging.info("拉取结果成功")
         self.update_frame()
         self.paintBoard.clear()
         self.progressBar.setProperty("value", 100)
         self.label.setText("Infer succeed")
         # 删除临时文件
-        delete_file('./final.json')
         delete_file('./temp.png')
 
     def btn_func(self, btn):

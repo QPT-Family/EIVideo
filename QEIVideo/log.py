@@ -5,7 +5,7 @@ __all__ = ["Logging", "change_none_color", "clean_stout", "TProgressBar"]
 
 # 创建一个logger
 logger = logging.getLogger("QEIVideo_logger")
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 # 输出至控制台
 st_handler = logging.StreamHandler()

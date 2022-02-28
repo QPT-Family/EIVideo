@@ -57,7 +57,8 @@ class Manet(BaseSegment):
         # 2. Construct data.
         sequence = cfg["video_path"].split('/')[-1].split('.')[0]
         obj_nums = 1
-        images, _ = load_video(cfg["video_path"], 480)
+        Logging.debug("EIVideo/data/uploads/video/" + cfg["video_path"])
+        images, _ = load_video("EIVideo/data/uploads/video/" + cfg["video_path"], 480)
         Logging.debug("stage1 load_video success")
         # [195, 389, 238, 47, 244, 374, 175, 399]
         # .shape: (502, 480, 600, 3)
@@ -168,7 +169,7 @@ class Manet(BaseSegment):
 
                 scribble_label = scribble_label.unsqueeze(0)
                 model_name = cfg['model_name']
-                output_dir = cfg.get("output_dir", f"./output/{model_name}")
+                output_dir = cfg.get("output_dir", f"./EIVideo/output/{model_name}")
                 inter_file_path = os.path.join(
                     output_dir, sequence, 'interactive' + str(n_interaction),
                                           'turn' + str(inter_turn))

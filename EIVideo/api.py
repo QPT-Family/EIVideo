@@ -98,18 +98,17 @@ def submit_masks(save_path, masks, images):
     Logging.debug("save final.json done")
 
 
-def json2frame(path):
-    with open(path, 'r', encoding='utf-8') as f:
-        res = f.read()
-        a = json.loads(res)
-        b = a.get('overlays')
-        b_array = np.array(b)
-        frame_list = []
+def json2frame(json_data=None):
+    res = json_data
+    # a = json.loads(res)
+    b = res.get('overlays')
+    b_array = np.array(b)
+    frame_list = []
 
-        for i in range(0, len(b_array)):
-            im = Image.fromarray(np.uint8(b_array[i]))
-            im = cv2.cvtColor(np.asarray(im), cv2.COLOR_RGB2BGR)
-            im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
-            frame_list.append(im)
+    for i in range(0, len(b_array)):
+        im = Image.fromarray(np.uint8(b_array[i]))
+        im = cv2.cvtColor(np.asarray(im), cv2.COLOR_RGB2BGR)
+        im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
+        frame_list.append(im)
     Logging.debug("turn final.json to frames done")
     return frame_list

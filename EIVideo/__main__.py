@@ -18,7 +18,7 @@ import json
 import paddle
 import numpy as np
 
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_bootstrap import Bootstrap
 
 from EIVideo import join_root_path
@@ -138,11 +138,14 @@ def infer():
     if request.method == 'POST':
         data = request.get_data()
         json_data = json.loads(data.decode("utf-8"))
-        video_path = json_data.get("video_path")
+        video_name = json_data.get("video_path").split('/')[-1]
         save_path = json_data.get("save_path")
         json_scribbles = json_data.get("params")
-        start_infer(video_path=video_path, save_path=save_path, json_scribbles=json_scribbles)
-        return 'server infer done'
+        start_infer(video_path=video_name, save_path=save_path, json_scribbles=json_scribbles)
+        from EIVideo import TEMP_JSON_FINAL_PATH
+        with open(TEMP_JSON_FINAL_PATH) as f:
+            jsonStr = json.load(f)
+            return jsonify(jsonStr)
 
 
 if __name__ == '__main__':
@@ -150,4 +153,4 @@ if __name__ == '__main__':
     Logging.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
     Logging.info("-+-+-+-+-+服务启动成功-+-+-+-+-")
     Logging.info("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
-    app.run(debug=False)
+    app.run(debug=False, host='0.0.0.0', port=6666)

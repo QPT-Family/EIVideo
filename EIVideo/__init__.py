@@ -8,8 +8,8 @@ from EIVideo.version import __version__
 from EIVideo.log import Logging
 
 EI_VIDEO_ROOT = os.path.abspath(os.path.dirname(__file__))
-TEMP_IMG_SAVE_PATH = "./temp.png"
-TEMP_JSON_FINAL_PATH = "./final.json"
+TEMP_IMG_SAVE_PATH = "./QEIVideo/temp.png"
+TEMP_JSON_FINAL_PATH = "./EIVideo/final.json"
 
 
 def join_root_path(path: str):
