@@ -42,7 +42,6 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         self.select_video_path = None
         self.save_path = "./output"
         os.makedirs(self.save_path, exist_ok=True)
-
         self.setupUi(self)
         Logging.info("QEIVideo启动成功")
         QMessageBox.information(self,
@@ -66,7 +65,9 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
                   "save_path": self.save_path,
                   "params": dic_str}
         paths_json = json.dumps(paths2)
-        self.r = requests.post("http://127.0.0.1:6666/infer", data=paths_json)
+        self.infer_url = self.serveripEdit.text() + "/infer"
+        Logging.debug(self.infer_url)
+        self.r = requests.post(self.infer_url, data=paths_json)
         Logging.info("推理结束,正在拉取结果.")
         self.progressBar.setProperty("value", 75)
         self.all_frames = json2frame(json_data=self.r.json())
@@ -112,6 +113,19 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
                                         "请选择正确的视频格式",
                                         "请选择正确的视频格式,目前默认支持mp4/MP4/mov/MOV/avi/AVI。",
                                         QMessageBox.Yes)
+
+        elif btn == self.uploadButton:
+            self.upload_video_path, _ = QFileDialog.getOpenFileName(self, "Open", "", "*.mp4;;All Files(*)")
+            Logging.debug("Upload video file path:\t" + self.upload_video_path)
+            video_type_list = ["mp4", "MP4", "mov", "MOV", "avi", "AVI"]
+            if self.upload_video_path.split('/')[-1].split('.')[-1] in video_type_list:
+                files = {'file': open(self.upload_video_path, 'rb')}
+                uploads_url = self.serveripEdit.text() + "/uploads"
+                self.r = requests.post(uploads_url, files=files)
+                Logging.info("视频上传成功")
+            else:
+                Logging.info("请选择正确的视频格式,目前默认支持mp4/MP4/mov/MOV/avi/AVI")
+
 
     def on_cbtn_eraser_clicked(self):
         self.label.setText("Eraser On")

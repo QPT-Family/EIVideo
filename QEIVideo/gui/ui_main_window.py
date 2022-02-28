@@ -85,7 +85,19 @@ class Ui_MainWindow(object):
         self.rightLayout.setContentsMargins(0, 0, 0, 0)
         self.rightLayout.setObjectName("rightLayout")
         self.rightLayout.addWidget(self.helplabel)
-        self.rightLayout.addSpacing(50)
+        self.rightLayout.addSpacing(30)
+
+        self.serveripEdit = QLineEdit(self.frame)
+        self.serveripEdit.setText("http://127.0.0.1:6666")
+        self.rightLayout.addWidget(self.serveripEdit)
+        self.rightLayout.addSpacing(30)
+
+        self.uploadButton = QtWidgets.QPushButton("上传文件")
+        self.uploadButton.setParent(self.frame)
+        self.uploadButton.clicked.connect(lambda: self.btn_func(self.uploadButton))
+        self.rightLayout.addWidget(self.uploadButton)
+
+        self.rightLayout.addSpacing(30)
         self.rightLayout.addWidget(self.cbtn_Eraser)
         self.rightLayout.addWidget(self.btn_Clear)
         self.colorLayout = QtWidgets.QHBoxLayout(self.widget2)
@@ -94,8 +106,6 @@ class Ui_MainWindow(object):
         self.colorLayout.addWidget(self.label_penColor)
         self.colorLayout.addWidget(self.comboBox_penColor)
         self.rightLayout.addLayout(self.colorLayout)
-
-
 
         # pushButton_6 -> GO
         self.pushButton_6 = QtWidgets.QPushButton(self.frame)

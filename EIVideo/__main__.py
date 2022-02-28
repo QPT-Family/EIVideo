@@ -18,6 +18,7 @@ import json
 import paddle
 import numpy as np
 
+from werkzeug.utils import secure_filename
 from flask import Flask, request, jsonify
 from flask_bootstrap import Bootstrap
 
@@ -30,11 +31,12 @@ DEF_CONFIG_FILE_PATH = join_root_path("configs/manet.yaml")
 DEF_PARAMS_FILE_PATH = join_root_path("model/default_manet.pdparams")
 
 app = Flask(__name__)
+basedir = os.path.abspath(os.path.dirname(__file__))
+UPLOAD_FOLDER = os.path.join(basedir, 'data/uploads/video')
+ALLOWED_EXTENSIONS = set(["mp4", "MP4", "mov", "MOV", "avi", "AVI"])
 bootstrap = Bootstrap(app)
 app.config['SECRET_KEY'] = os.urandom(24)
-
-basedir = os.path.abspath(os.path.dirname(__file__))
-uploadDir = os.path.join(basedir, 'static/uploads')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 def parse_args():
@@ -146,6 +148,36 @@ def infer():
         with open(TEMP_JSON_FINAL_PATH) as f:
             jsonStr = json.load(f)
             return jsonify(jsonStr)
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+from flask import Flask, flash, request, redirect, url_for
+from werkzeug.utils import secure_filename
+
+
+@app.route('/uploads', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        if not os.path.exists(app.config['UPLOAD_FOLDER']):
+            os.makedirs(app.config['UPLOAD_FOLDER'])
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            return "No file part"
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            return "It's empty"
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for("uploads",
+                                    filename=filename))
+    return "Uploads done"
 
 
 if __name__ == '__main__':
