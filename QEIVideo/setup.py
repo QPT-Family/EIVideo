@@ -10,7 +10,7 @@ with open('requirements.txt', encoding="utf-8-sig") as f:
 
 setup(
     name='QEIVideo',
-    version="0.1a1.dev2",
+    version="0.1a2.dev1",
     packages=find_packages(),
     long_description="[https://github.com/QPT-Family/EIVideo](https://github.com/QPT-Family/EIVideo)",
     long_description_content_type='text/markdown',

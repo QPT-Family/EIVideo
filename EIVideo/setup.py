@@ -9,7 +9,7 @@ with open('requirements.txt', encoding="utf-8-sig") as f:
 
 setup(
     name='EIVideo',
-    version="0.1a2.dev4",
+    version="0.1a3.dev1",
     packages=find_packages(),
     long_description="[https://github.com/QPT-Family/EIVideo](https://github.com/QPT-Family/EIVideo)",
     long_description_content_type='text/markdown',
