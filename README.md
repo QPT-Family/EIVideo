@@ -15,6 +15,10 @@
 
 ---
 
+> 更好用的新版EIVideo目前正在开发中，相关进展详见[Project](https://github.com/orgs/QPT-Family/projects/2)
+
+---
+
 
 <div align="center">
 <img width="600" alt="图片" src="https://user-images.githubusercontent.com/46156734/148925774-a04b641c-6a71-43ed-a7c0-d4b66e8d6e8a.png">
