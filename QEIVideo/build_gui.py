@@ -11,21 +11,10 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-import EIVideo
 from EIVideo.api import json2frame, png2dic, load_video
-from EIVideo import TEMP_IMG_SAVE_PATH, TEMP_JSON_FINAL_PATH
+from EIVideo import TEMP_IMG_SAVE_PATH
 from QEIVideo.log import Logging
 from QEIVideo.gui.ui_main_window import Ui_MainWindow
-
-EIVideo_ROOT = os.path.dirname(EIVideo.__file__)
-MODEL_PATH = os.path.join(EIVideo_ROOT, "model/default_manet.pdparams")
-if not os.path.exists(MODEL_PATH):
-    import wget
-    import ssl
-    ssl._create_default_https_context = ssl._create_unverified_context
-    Logging.info("正在下载模型文件")
-    wget.download("https://videotag.bj.bcebos.com/PaddleVideo-release2.2/MANet_EIVideo.pdparams", out=MODEL_PATH)
-    Logging.info("模型文件下载完成")
 
 
 def delete_file(file_path):
@@ -33,7 +22,7 @@ def delete_file(file_path):
         os.remove(file_path)
         Logging.debug('delete temp file(s) done')
     else:
-        Logging.debug('no such file:%s' % file_path)  # 则返回文件不存在
+        Logging.debug('no such file:%s' % file_path)
 
 
 class BuildGUI(QMainWindow, Ui_MainWindow):
@@ -77,7 +66,7 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
         self.progressBar.setProperty("value", 100)
         self.label.setText("Infer succeed")
         # 删除临时文件
-        delete_file('./temp.png')
+        delete_file(TEMP_IMG_SAVE_PATH)
 
     def btn_func(self, btn):
         if btn == self.playbtn:
@@ -121,11 +110,13 @@ class BuildGUI(QMainWindow, Ui_MainWindow):
             if self.upload_video_path.split('/')[-1].split('.')[-1] in video_type_list:
                 files = {'file': open(self.upload_video_path, 'rb')}
                 uploads_url = self.serveripEdit.text() + "/uploads"
-                self.r = requests.post(uploads_url, files=files)
-                Logging.info("视频上传成功")
+                self.upload_status = requests.post(uploads_url, files=files)
+                Logging.info(self.upload_status.json().get('isUploaded'))
             else:
-                Logging.info("请选择正确的视频格式,目前默认支持mp4/MP4/mov/MOV/avi/AVI")
-
+                QMessageBox.information(self,
+                                        "请选择正确的视频格式",
+                                        "请选择正确的视频格式,目前默认支持mp4/MP4/mov/MOV/avi/AVI。",
+                                        QMessageBox.Yes)
 
     def on_cbtn_eraser_clicked(self):
         self.label.setText("Eraser On")

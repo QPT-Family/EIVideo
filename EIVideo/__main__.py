@@ -1,16 +1,7 @@
-# copyright (c) 2020 PaddlePaddle Authors. All Rights Reserve.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless requifFred by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Author: AP-Kai
+# Datetime: 2022/3/614
+# Copyright belongs to the author.
+# Please indicate the source for reprinting.
 import argparse
 import random
 import os
@@ -18,10 +9,10 @@ import json
 import paddle
 import numpy as np
 
-from werkzeug.utils import secure_filename
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, flash, request, redirect, url_for
 from flask_bootstrap import Bootstrap
-
+from werkzeug.utils import secure_filename
+import EIVideo
 from EIVideo import join_root_path
 from EIVideo.log import Logging
 from EIVideo.paddlevideo.modeling.framework import Manet
@@ -37,6 +28,16 @@ ALLOWED_EXTENSIONS = set(["mp4", "MP4", "mov", "MOV", "avi", "AVI"])
 bootstrap = Bootstrap(app)
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+EIVideo_ROOT = os.path.dirname(EIVideo.__file__)
+MODEL_PATH = os.path.join(EIVideo_ROOT, "model/default_manet.pdparams")
+if not os.path.exists(MODEL_PATH):
+    import wget
+    import ssl
+    ssl._create_default_https_context = ssl._create_unverified_context
+    Logging.info("正在下载模型文件")
+    wget.download("https://videotag.bj.bcebos.com/PaddleVideo-release2.2/MANet_EIVideo.pdparams", out=MODEL_PATH)
+    Logging.info("模型文件下载完成")
 
 
 def parse_args():
@@ -155,10 +156,6 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-from flask import Flask, flash, request, redirect, url_for
-from werkzeug.utils import secure_filename
-
-
 @app.route('/uploads', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
@@ -175,9 +172,14 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for("uploads",
-                                    filename=filename))
-    return "Uploads done"
+            return jsonify({
+                "isUploaded": "Uploaded done",
+                "filename": filename
+            })
+        return jsonify({
+            "isUploaded": "Upload failed",
+            "filename": None
+        })
 
 
 if __name__ == '__main__':
