@@ -15,7 +15,7 @@
 
 ---
 
-> 更好用的新版EIVideo目前正在开发中，相关进展详见[Project](https://github.com/orgs/QPT-Family/projects/2)
+> 更好用的新版EIVideo目前正在开发中，[相关进展点此查看 - GitHub Project](https://github.com/orgs/QPT-Family/projects/2)
 
 ---
 
