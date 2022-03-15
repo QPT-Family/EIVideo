@@ -11,9 +11,9 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-from EIVideo.api import json2frame, png2dic, load_video
+from EIVideo.eivideo.utils.manet.api import json2frame, png2dic, load_video
 from EIVideo import TEMP_IMG_SAVE_PATH
-from QEIVideo.log import Logging
+from EIVideo.eivideo.utils.log import Logging
 from QEIVideo.gui.ui_main_window import Ui_MainWindow
 
 

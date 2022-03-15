@@ -3,8 +3,7 @@
 # Copyright belongs to the author.
 # Please indicate the source for reprinting.
 from setuptools import setup, find_packages
-from EIVideo.version import __version__
-
+from eivideo import __version__
 
 with open('requirements.txt', encoding="utf-8-sig") as f:
     requirements = f.readlines()
