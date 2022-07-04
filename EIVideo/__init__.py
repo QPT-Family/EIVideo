@@ -4,7 +4,6 @@
 # Please indicate the source for reprinting.
 
 import os
-from EIVideo.version import __version__
 from EIVideo.log import Logging
 
 EI_VIDEO_ROOT = os.path.abspath(os.path.dirname(__file__))
